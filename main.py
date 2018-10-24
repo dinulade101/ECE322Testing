@@ -1,10 +1,12 @@
 import sqlite3
 import sys
 import os.path
-
+from authentication.member import Member
 
 connection = None
 cursor = None
+
+user = None
 
 def connect(path):
     global connection, cursor
@@ -12,6 +14,7 @@ def connect(path):
     connection = sqlite3.connect(path)
     cursor = connection.cursor()
     cursor.execute(' PRAGMA forteign_keys=ON; ')
+    connection.create_function('HASH', 1, Member.hash)
     connection.commit()
     return
 
@@ -21,7 +24,6 @@ def main():
     db_path = "./prj.db"
     if os.path.isfile(db_path):
         connect(db_path)
-        print('success')
     else:
         print('ERROR: database file not found')
         sys.exit(0)
