@@ -1,2 +1,2 @@
 # 291-Mini-Project-I
-This is the first miniproject for 291. This is a terminal application that allows users to login and book rides. Will use Python and SQLite3
+A command line application for ride sharing using SQLite as our database for CMPUT 291 Mini-Project-I
