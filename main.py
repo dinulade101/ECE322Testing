@@ -1,6 +1,7 @@
 import sqlite3
-import os.path
 import sys
+import os.path
+
 
 connection = None
 cursor = None
@@ -20,6 +21,7 @@ def main():
     db_path = "./prj.db"
     if os.path.isfile(db_path):
         connect(db_path)
+        print('success')
     else:
         print('ERROR: database file not found')
         sys.exit(0)
