@@ -28,6 +28,8 @@ def main():
         print('ERROR: database file not found')
         sys.exit(0)
 
+    # member = command.user()
+
     connection.commit()
     connection.close()
     return

@@ -1,34 +1,37 @@
 import hashlib
+import sys
 
 class Member:
 
-    def __init__(self, email, pwd):
+    def __init__(self, email, pwd, cursor):
+        self.cursor = cursor
         self.email = email
         if not self.login(pwd):
             self.logout()
 
-    @staticmethod
     def signup(email, name, phone, pwd):
-        ## TODO: signup a user and register
-        print('Signup succesful!')
+        if checkIfExists(email):
+            return None
+        self.cursor.execute("INSERT INTO members VALUES (?, ?, ?, ?)", (email, name, phone, hash(pwd)))
+        conn.commit()
         return Member(email, pwd)
 
     @staticmethod
     def hash(pwd):
         return hashlib.sha256(pwd.encode()).hexdigest()
 
-    @staticmethod
     def checkIfExists(email):
-        ## TODO: print email already taken if it exists
+        self.cursor.execute("SELECT COUNT(*) FROM members WHERE email=:email", {"email":email})
+        if self.cursor.fetchone()[0] != 0:
+            return True
         return False
 
     def login(self, pwd):
-        ## TODO: print invalid combination on failed login
-        print('Welcome to ride share!')
+        ## TODO
         return True
 
     def logout(self):
-        self.email = None
+        self.email = self.cursor = None
 
     def isLoggedIn(self):
         return self.email is not None
