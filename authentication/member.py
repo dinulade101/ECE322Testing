@@ -9,26 +9,26 @@ class Member:
         if not self.login(pwd):
             self.logout()
 
-    def signup(email, name, phone, pwd):
-        if checkIfExists(email):
-            return None
-        self.cursor.execute("INSERT INTO members VALUES (?, ?, ?, ?)", (email, name, phone, hash(pwd)))
-        conn.commit()
-        return Member(email, pwd)
+    @staticmethod
+    def signup(email, name, phone, pwd, cursor):
+        cursor.execute("INSERT INTO members VALUES (?, ?, ?, ?)", (email, name, phone, Member.hash(pwd)))
+        return Member(email, pwd, cursor)
 
     @staticmethod
     def hash(pwd):
         return hashlib.sha256(pwd.encode()).hexdigest()
 
-    def checkIfExists(email):
-        self.cursor.execute("SELECT COUNT(*) FROM members WHERE email=:email", {"email":email})
-        if self.cursor.fetchone()[0] != 0:
+    @staticmethod
+    def checkIfExists(cursor, email):
+        cursor.execute("SELECT COUNT(*) FROM members WHERE email=:email", {"email":email})
+        if cursor.fetchone()[0] != 0:
             return True
         return False
 
     def login(self, pwd):
         self.cursor.execute("SELECT pwd FROM members WHERE email=:email", {"email":self.email})
-        if self.cursor.fetchone()[0] != hash(pwd):
+        result = self.cursor.fetchone()
+        if result == None or result[0] != Member.hash(pwd):
             return False
         return True
 

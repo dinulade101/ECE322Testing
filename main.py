@@ -17,7 +17,6 @@ def connect(path):
     connection = sqlite3.connect(path)
     cursor = connection.cursor()
     cursor.execute(' PRAGMA forteign_keys=ON; ')
-    connection.create_function('HASH', 1, Member.hash)
     connection.commit()
 
     mCmd = MemberCommand(cursor)
@@ -35,10 +34,18 @@ def main():
         sys.exit(0)
 
     member = mCmd.user()
+    connection.commit()
 
     connection.commit()
     connection.close()
     return
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('\nThanks for using rideshare!\n')
+        try:
+            sys.exit(0)
+        except SystemExit:
+            os._exit(0)
