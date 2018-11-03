@@ -4,7 +4,7 @@ import sqlite3
 class PostReq:
 
     def __init__(self, cursor):
-        #assume cursor is
+        #assume cursor is already setup
         self.cursor = cursor
 
     def validate_location(self, loc_code):

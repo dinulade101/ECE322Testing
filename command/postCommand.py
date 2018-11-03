@@ -62,6 +62,6 @@ class PostCommand(Command):
         # values of columns
         for func in self.askingFunc:
             if not func():
-                break
-        print(self.values)
+                return
+        
         self.pr.insert_req(self.values)
