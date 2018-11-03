@@ -43,8 +43,8 @@ def main():
         print('ERROR: database file not found')
         sys.exit(0)
 
-    cbCmd.displayAllBookings()
-
+    cbCmd.main()
+    
     connection.commit()
     connection.close()
     return

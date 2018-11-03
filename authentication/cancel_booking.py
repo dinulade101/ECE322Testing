@@ -31,24 +31,31 @@ class CancelBooking:
             SELECT email, rno
             FROM bookings
             WHERE bno = ?
-        ''', )
+        ''', (bno,))
         deleted_info = self.cursor.fetchall()
         self.cursor.execute('''
             DELETE
             FROM bookings
             WHERE bno = ?
         ''', (bno, ))
-        self.cursor.commit()
-        return deleted_info
+        
+        return deleted_info[0]
 
     def message_deleted_user(self, deleting_user, deleted_user, rno):
         '''
-        This sends a message to the user who's booking was canceled
+        This sends a message to the user who's booking was canceled.
+        Inserts a row into the inboxs
         :param deleting_user: email of the booking driver
         :param deleted_user: email of the member who's booking was canceled
         :param rno: rno of the ride the booking referred to.
-        :return: the email of the deleted row
+        :return: None
         '''
+        self.cursor.execute('''
+            INSERT INTO inbox
+            VALUES ( ?, datetime('now'), ?, 
+            "Your ride booking has been deleted. Aplogies for the inconvenience.",
+            ?, 'n')   
+        ''', (deleted_user, deleting_user,rno))
         pass
         
 
