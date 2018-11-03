@@ -27,7 +27,9 @@ class Member:
         return False
 
     def login(self, pwd):
-        ## TODO
+        self.cursor.execute("SELECT pwd FROM members WHERE email=:email", {"email":self.email})
+        if self.cursor.fetchone()[0] != hash(pwd):
+            return False
         return True
 
     def logout(self):
