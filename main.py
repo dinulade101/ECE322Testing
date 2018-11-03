@@ -2,6 +2,7 @@ import sqlite3
 import sys
 import os.path
 from authentication.member import Member
+from search.search import Search
 
 connection = None
 cursor = None
@@ -29,9 +30,14 @@ def main():
         sys.exit(0)
 
     # member = command.user()
+    search = Search(cursor)
+    print(search.return_rides("Alberta"))
 
     connection.commit()
     connection.close()
+
+
+
     return
 
 if __name__ == "__main__":
