@@ -22,5 +22,7 @@ class PostRide:
         :returns: None 
         """
         self.cursor.execute('SELECT MAX(rid) FROM requests;')
-        
+        next_id = self.cursor.fetchone()
+        print(next_id)
+
 

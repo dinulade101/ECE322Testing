@@ -3,6 +3,7 @@ import sys
 import os.path
 from authentication.member import Member
 
+import post_ride
 connection = None
 cursor = None
 
@@ -29,10 +30,13 @@ def main():
         sys.exit(0)
 
     # member = command.user()
-
+    test()
     connection.commit()
     connection.close()
     return
 
+def test():
+    pr = post_ride.PostRide(cursor)
+    print(pr.validate_location("YEG"))
 if __name__ == "__main__":
     main()
