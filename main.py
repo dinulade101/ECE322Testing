@@ -2,41 +2,27 @@ import sqlite3
 import sys
 import os.path
 from authentication.member import Member
-<<<<<<< HEAD
-from command.membercommand import MemberCommand
-import post_ride
 from search_rides.search_rides import SearchRides
 from search_requests.search_requests import SearchRequests
-=======
-from command.memberCommand import MemberCommand
-from command.postCommand import PostCommand
-from command.cancelBookingCommand import CancelBookingCommand
+from command.membercommand import MemberCommand
 
 
-
->>>>>>> ea9651d9dc9b96bfce735a29b78ba7387436c600
 
 connection = None
 cursor = None
 
-mCmd = None
-pCmd = None
-cbCmd = None
-
+cmd = None
 user = None
 
 def connect(path):
-    global connection, cursor, mCmd, pCmd, cbCmd
+    global connection, cursor, cmd
 
     connection = sqlite3.connect(path)
     cursor = connection.cursor()
     cursor.execute(' PRAGMA forteign_keys=ON; ')
     connection.commit()
 
-    mCmd = MemberCommand(cursor)
-    pCmd = PostCommand(cursor, "kenboo1998@gmail.com")
-    cbCmd = CancelBookingCommand(cursor, "bob@123.ca")
-
+    cmd = MemberCommand(cursor)
     return
 
 def main():
@@ -49,23 +35,9 @@ def main():
         print('ERROR: database file not found')
         sys.exit(0)
 
-    member = mCmd.user()
+    member = cmd.user()
     member.printUnseenMessages()
     connection.commit()
-
-    # '''search = SearchRides(cursor)
-    # user_input = input().split(',')
-    # search.find_rides(user_input)
-    # search.display_rides(0)'''
-    #
-    # search_requests = SearchRequests(cursor, "darryl@oil.com")
-    # user_input = input("To search by pickup location, please enter a pickup location code. Otherwise, to view all requests, press Enter to continue.")
-    # if user_input:
-    #     search_requests.find_requests(user_input)
-    # else:
-    #     search_requests.find_requests()
-    #
-    # search_requests.display_results(0)
 
     connection.commit()
     connection.close()

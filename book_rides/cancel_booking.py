@@ -5,7 +5,7 @@ class CancelBooking:
     def __init__(self, cursor):
         #assume cursor is already setup
         self.cursor = cursor
-    
+
     def get_member_bookings(self, m_email):
         self.cursor.execute('''
             SELECT b.bno, b.email, b.rno, b.cost, b.seats
@@ -18,7 +18,7 @@ class CancelBooking:
     def cancel_booking(self, m_email, bno):
         deleted_email, rno_deleted = self.delete_booking(bno)
         self.message_deleted_user(m_email ,deleted_email, rno_deleted)
-        
+
 
 
     def delete_booking(self, bno):
@@ -38,7 +38,7 @@ class CancelBooking:
             FROM bookings
             WHERE bno = ?
         ''', (bno, ))
-        
+
         return deleted_info[0]
 
     def message_deleted_user(self, deleting_user, deleted_user, rno):
@@ -52,11 +52,8 @@ class CancelBooking:
         '''
         self.cursor.execute('''
             INSERT INTO inbox
-            VALUES ( ?, datetime('now'), ?, 
+            VALUES ( ?, datetime('now'), ?,
             "Your ride booking has been deleted. Aplogies for the inconvenience.",
-            ?, 'n')   
+            ?, 'n')
         ''', (deleted_user, deleting_user,rno))
         pass
-        
-
-        
