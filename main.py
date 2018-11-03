@@ -4,16 +4,19 @@ import os.path
 from authentication.member import Member
 from command.memberCommand import MemberCommand
 
-import post_ride
+from command.postCommand import PostCommand
+
+
 connection = None
 cursor = None
 
 mCmd = None
+pCmd = None
 
 user = None
 
 def connect(path):
-    global connection, cursor, mCmd
+    global connection, cursor, mCmd, pCmd
 
     connection = sqlite3.connect(path)
     cursor = connection.cursor()
@@ -22,7 +25,7 @@ def connect(path):
     connection.commit()
 
     mCmd = MemberCommand(cursor)
-
+    pCmd = PostCommand(cursor, "kenboo1998@gmail.com")
     return
 
 def main():
@@ -35,14 +38,11 @@ def main():
         print('ERROR: database file not found')
         sys.exit(0)
 
-    member = mCmd.user()
+    pCmd.ask()
 
     connection.commit()
     connection.close()
     return
 
-def test():
-    pr = post_ride.PostRide(cursor)
-    print(pr.validate_location("YEG"))
 if __name__ == "__main__":
     main()
