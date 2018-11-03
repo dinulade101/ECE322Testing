@@ -1,5 +1,6 @@
 import hashlib
 import sys
+from messaging.message import Message
 
 class Member:
 
@@ -37,3 +38,13 @@ class Member:
 
     def isLoggedIn(self):
         return self.email is not None
+
+    def printUnseenMessages(self):
+        msgs = Message(self.cursor).unseen(self.email)
+        if len(msgs) > 0:
+            print("\nYou have new messages:\n")
+        else:
+            print("\nYou have no new messages!\n")
+        for msg in msgs:
+            print("FROM: {0} | REGARDING: {1} | DATE: {2}\nCONTENT: {3}\n".format(msg[2], msg[4], msg[1], msg[3]))
+        Message(self.cursor).markRead(self.email)

@@ -3,8 +3,8 @@ import sys
 import os.path
 from authentication.member import Member
 from command.membercommand import MemberCommand
-
 import post_ride
+
 connection = None
 cursor = None
 
@@ -35,15 +35,13 @@ def main():
         sys.exit(0)
 
     member = mCmd.user()
+    member.printUnseenMessages()
     connection.commit()
 
     connection.commit()
     connection.close()
     return
 
-def test():
-    pr = post_ride.PostRide(cursor)
-    print(pr.validate_location("YEG"))
 if __name__ == "__main__":
     try:
         main()
