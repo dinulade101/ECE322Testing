@@ -2,20 +2,31 @@ import sqlite3
 import sys
 import os.path
 from authentication.member import Member
+<<<<<<< HEAD
 from command.membercommand import MemberCommand
 import post_ride
 from search_rides.search_rides import SearchRides
 from search_requests.search_requests import SearchRequests
+=======
+from command.memberCommand import MemberCommand
+from command.postCommand import PostCommand
+from command.cancelBookingCommand import CancelBookingCommand
+
+
+
+>>>>>>> ea9651d9dc9b96bfce735a29b78ba7387436c600
 
 connection = None
 cursor = None
 
 mCmd = None
+pCmd = None
+cbCmd = None
 
 user = None
 
 def connect(path):
-    global connection, cursor, mCmd
+    global connection, cursor, mCmd, pCmd, cbCmd
 
     connection = sqlite3.connect(path)
     cursor = connection.cursor()
@@ -23,6 +34,8 @@ def connect(path):
     connection.commit()
 
     mCmd = MemberCommand(cursor)
+    pCmd = PostCommand(cursor, "kenboo1998@gmail.com")
+    cbCmd = CancelBookingCommand(cursor, "bob@123.ca")
 
     return
 
