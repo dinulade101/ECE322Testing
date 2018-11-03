@@ -77,7 +77,7 @@ class SearchRides:
         :returns: None 
         """
         #check if page num is valid
-        page = self.rides[page_num*5: page_num*5+5]
+        page = self.rides[page_num*5: min(page_num*5+5, len(self.rides))]
         for i, ride in enumerate(page):
             print(str(page_num*5+i+1) + '.', end='')
             print(ride)
