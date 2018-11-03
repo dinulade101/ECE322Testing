@@ -31,7 +31,11 @@ def main():
 
     # member = command.user()
     search = Search(cursor)
-    print(search.return_rides("Alberta"))
+    user_input = input().split(',')
+    print(user_input)
+    search.return_rides(user_input)
+    search.display_rides(1)
+
 
     connection.commit()
     connection.close()
