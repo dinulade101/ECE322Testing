@@ -16,6 +16,11 @@ class CancelBooking:
         return self.cursor.fetchall()
 
     def cancel_booking(self, m_email, bno):
+        '''
+        Call this function to cancel the booking
+        :param m_email: The email of the booking driver
+        :param bno: bno of the booking
+        '''
         deleted_email, rno_deleted = self.delete_booking(bno)
         self.message_deleted_user(m_email ,deleted_email, rno_deleted)
 
