@@ -3,6 +3,7 @@ import sys
 import os.path
 from authentication.member import Member
 from search_rides.search_rides import SearchRides
+from search_requests.search_requests import SearchRequests
 
 connection = None
 cursor = None
@@ -30,11 +31,20 @@ def main():
         sys.exit(0)
 
     # member = command.user()
-    search = SearchRides(cursor)
+    '''search = SearchRides(cursor)
     user_input = input().split(',')
-    print(user_input)
     search.find_rides(user_input)
-    search.display_rides(0)
+    search.display_rides(0)'''
+
+    search_requests = SearchRequests(cursor, "darryl@oil.com")
+    user_input = input("To search by pickup location, please enter a pickup location code. Otherwise, to view all requests, press Enter to continue.")
+    if user_input:
+        search_requests.find_requests(user_input)
+    else:
+        search_requests.find_requests()
+        
+    search_requests.display_results(0)
+    
 
     connection.commit()
     connection.close()
