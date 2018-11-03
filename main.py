@@ -33,8 +33,8 @@ def main():
     search = Search(cursor)
     user_input = input().split(',')
     print(user_input)
-    search.return_rides(user_input)
-    search.display_rides(1)
+    search.find_rides(user_input)
+    search.display_rides(0)
 
 
     connection.commit()
