@@ -6,8 +6,6 @@ from search_rides.search_rides import SearchRides
 from search_requests.search_requests import SearchRequests
 from command.membercommand import MemberCommand
 
-
-
 connection = None
 cursor = None
 
