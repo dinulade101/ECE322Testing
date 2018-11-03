@@ -3,8 +3,10 @@ import sys
 import os.path
 from authentication.member import Member
 from command.memberCommand import MemberCommand
-
 from command.postCommand import PostCommand
+from command.cancelBookingCommand import CancelBookingCommand 
+
+
 
 
 connection = None
@@ -12,11 +14,12 @@ cursor = None
 
 mCmd = None
 pCmd = None
+cbCmd = None
 
 user = None
 
 def connect(path):
-    global connection, cursor, mCmd, pCmd
+    global connection, cursor, mCmd, pCmd, cbCmd
 
     connection = sqlite3.connect(path)
     cursor = connection.cursor()
@@ -26,6 +29,8 @@ def connect(path):
 
     mCmd = MemberCommand(cursor)
     pCmd = PostCommand(cursor, "kenboo1998@gmail.com")
+    cbCmd = CancelBookingCommand(cursor, "bob@123.ca")
+
     return
 
 def main():
@@ -38,7 +43,7 @@ def main():
         print('ERROR: database file not found')
         sys.exit(0)
 
-    pCmd.ask()
+    cbCmd.displayAllBookings()
 
     connection.commit()
     connection.close()
