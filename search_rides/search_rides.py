@@ -1,13 +1,19 @@
 import sqlite3
 
-class Search:
+class SearchRides:
     def __init__(self, cursor):
         self.cursor = cursor
         self.rides = []
     def is_key_word_valid(self,word):
         return word
     def find_rides(self, key_words):
-        #search query with match for enroute location 
+        """
+        Finds rides that match locations that match the key_words provided
+        Stores found rides in self.rides array
+        :param key_words: array of 1-3 strings specifying key words locations should be matched to
+        :returns: None 
+        """   
+
         search_query = '''
         SELECT r.*, c.*
         FROM rides r, locations l1, locations l2, locations l3, enroute e, cars c
@@ -64,7 +70,7 @@ class Search:
 
 
     def display_rides(self, page_num):
-         """
+        """
         Displays rides stored in self.rides
         Must run find_rides() prior to calling display_rides()
         :param page_num: specifies which page of rides to be shown (5 rides per page)

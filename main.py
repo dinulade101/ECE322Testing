@@ -2,7 +2,7 @@ import sqlite3
 import sys
 import os.path
 from authentication.member import Member
-from search.search import Search
+from search_rides.search_rides import SearchRides
 
 connection = None
 cursor = None
@@ -30,17 +30,14 @@ def main():
         sys.exit(0)
 
     # member = command.user()
-    search = Search(cursor)
+    search = SearchRides(cursor)
     user_input = input().split(',')
     print(user_input)
     search.find_rides(user_input)
     search.display_rides(0)
 
-
     connection.commit()
     connection.close()
-
-
 
     return
 
