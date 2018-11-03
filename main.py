@@ -2,7 +2,7 @@ import sqlite3
 import sys
 import os.path
 from authentication.member import Member
-from command.memberCommand import MemberCommand
+from command.membercommand import MemberCommand
 
 import post_ride
 connection = None
