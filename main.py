@@ -2,21 +2,27 @@ import sqlite3
 import sys
 import os.path
 from authentication.member import Member
+from command.memberCommand import MemberCommand
 
 import post_ride
 connection = None
 cursor = None
 
+mCmd = None
+
 user = None
 
 def connect(path):
-    global connection, cursor
+    global connection, cursor, mCmd
 
     connection = sqlite3.connect(path)
     cursor = connection.cursor()
     cursor.execute(' PRAGMA forteign_keys=ON; ')
     connection.create_function('HASH', 1, Member.hash)
     connection.commit()
+
+    mCmd = MemberCommand(cursor)
+
     return
 
 def main():
@@ -29,8 +35,8 @@ def main():
         print('ERROR: database file not found')
         sys.exit(0)
 
-    # member = command.user()
-    test()
+    member = mCmd.user()
+
     connection.commit()
     connection.close()
     return
