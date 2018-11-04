@@ -1,3 +1,4 @@
+import sys
 from command.command import Command
 from command.offerRideCommand import OfferRideCommand
 
@@ -14,7 +15,7 @@ class MenuCommand(Command):
         r/R) Make a ride request\n
         v/V) View your ride requests\n
         l/L) Logout\n
-        ctrl + C) Quit\n''')
+        quit) Quit\n''')
 
         opt = opt.lower()
         if opt == 'o':
@@ -29,6 +30,8 @@ class MenuCommand(Command):
             pass
         elif opt == 'l':
             return False
+        elif opt == 'quit':
+            sys.exit(0)
         else:
             print('Invalid option!')
             return self.menu()
