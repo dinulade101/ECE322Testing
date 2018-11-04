@@ -6,6 +6,7 @@ from command.membercommand import MemberCommand
 import post_ride
 from search_rides.search_rides import SearchRides
 from search_requests.search_requests import SearchRequests
+from book_rides.book_rides import BookRides
 
 connection = None
 cursor = None
@@ -36,15 +37,15 @@ def main():
         print('ERROR: database file not found')
         sys.exit(0)
 
-    member = mCmd.user()
-    member.printUnseenMessages()
+    #member = mCmd.user()
+    #member.printUnseenMessages()
     connection.commit()
 
-    # '''search = SearchRides(cursor)
+    # search = SearchRides(cursor)
     # user_input = input().split(',')
     # search.find_rides(user_input)
-    # search.display_rides(0)'''
-    #
+    # search.display_rides(0)
+    
     # search_requests = SearchRequests(cursor, "darryl@oil.com")
     # user_input = input("To search by pickup location, please enter a pickup location code. Otherwise, to view all requests, press Enter to continue.")
     # if user_input:
@@ -53,6 +54,9 @@ def main():
     #     search_requests.find_requests()
     #
     # search_requests.display_results(0)
+
+    book = BookRides(cursor)
+    book.find_rides("connor@oil.com")
 
     connection.commit()
     connection.close()
