@@ -1,8 +1,9 @@
 from command.command import Command
 
 class MenuCommand(Command):
-    def __init__(self, cursor):
+    def __init__(self, email, cursor):
         super().__init__(cursor)
+        self.user = email
 
     def menu(self):
         opt = input('''Select option!\n

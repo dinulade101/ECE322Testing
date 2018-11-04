@@ -22,9 +22,14 @@ def connect(path):
     return
 
 def main():
+    if len(sys.argv) == 1:
+        print('ERROR: specify path to the database file')
+        sys.exit(0)
+
+    db_path = str(sys.argv[1])
+
     global connection, cursor, cmd, user
 
-    db_path = "./prj.db"
     if os.path.isfile(db_path):
         connect(db_path)
     else:
@@ -38,7 +43,7 @@ def main():
             user.printUnseenMessages()
             connection.commit()
         else:
-            cmd = MenuCommand(cursor)
+            cmd = MenuCommand(user.email, cursor)
             if not cmd.menu():
                 user.logout()
     connection.commit()
