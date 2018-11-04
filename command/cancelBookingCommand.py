@@ -19,7 +19,7 @@ class CancelBookingCommand(Command):
         self.cb = CancelBooking(cursor)
         
 
-    def display_all_bookings(self):
+    def menu(self):
 
         rows = self.cb.get_member_bookings(self.email)
 
