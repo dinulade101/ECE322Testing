@@ -2,11 +2,8 @@ import sqlite3
 import sys
 import os.path
 from authentication.member import Member
-from search_rides.search_rides import SearchRides
-from search_requests.search_requests import SearchRequests
 from command.membercommand import MemberCommand
-
-
+from command.menucommand import MenuCommand
 
 connection = None
 cursor = None
@@ -15,30 +12,40 @@ cmd = None
 user = None
 
 def connect(path):
-    global connection, cursor, cmd
+    global connection, cursor, user
 
     connection = sqlite3.connect(path)
     cursor = connection.cursor()
     cursor.execute(' PRAGMA forteign_keys=ON; ')
+    user = Member(None, None, cursor)
     connection.commit()
-
-    cmd = MemberCommand(cursor)
     return
 
 def main():
-    global connection, cursor
+    if len(sys.argv) == 1:
+        print('ERROR: specify path to the database file')
+        sys.exit(0)
 
-    db_path = "./prj.db"
+    db_path = str(sys.argv[1])
+
+    global connection, cursor, cmd, user
+
     if os.path.isfile(db_path):
         connect(db_path)
     else:
         print('ERROR: database file not found')
         sys.exit(0)
 
-    member = cmd.user()
-    member.printUnseenMessages()
-    connection.commit()
-
+    while True:
+        if not user.isLoggedIn():
+            cmd = MemberCommand(cursor)
+            user = cmd.user()
+            user.printUnseenMessages()
+            connection.commit()
+        else:
+            cmd = MenuCommand(user.email, cursor)
+            if not cmd.menu():
+                user.logout()
     connection.commit()
     connection.close()
 

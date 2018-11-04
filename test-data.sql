@@ -1,23 +1,23 @@
 -- Data prepared by Tanner Chell, tchell@ualberta.ca,
 -- published on 2018-Oct-05
 
--- |email|name|phone|pwd
+-- |email|name|phone|pwd  passwords set to abcd (hashed)
 insert into members values
-        ('jane_doe@abc.ca', 'Jane Maria-Ann Doe', '780-342-7584', 'abcd'),
-        ('bob@123.ca', 'Bob Williams', '780-342-2834', 'abcd'),
-        ('maria@xyz.org', 'Maria Calzone', '780-382-3847', 'abcd'),
-        ('the99@oil.com', 'Wayne Gretzky', '780-382-4382','efgasd'),
-        ('connor@oil.com', 'Connor Mcdavid', '587-839-2838', 'abcd'),
-        ('don@mayor.yeg', 'Don Iveson', '780-382-8239','efgasd'),
-        ('darryl@oil.com', 'Darryl Katz', '604-238-2380', 'abcd'),
-        ('reilly@esks.org', 'Mike Reilly', '780-389-8928', 'abcd'),
-        ('mess@marky.mark', 'Mark Messier', '516-382-8939','efgasd'),
-        ('mal@serenity.ca', 'Nathan Fillion', '780-389-2899', 'abcd'),
-        ('kd@lang.ca', 'K. D. Lang', '874-384-3890','abcd'),
-        ('nellie@five.gov', 'Nellie McClung', '389-930-2839','efgasd'),
-        ('marty@mc.fly', 'Micheal J. Fox', '780-382-3899','efgasd'),
-        ('cadence@rap.fm', 'Roland Pemberton', '780-938-2738', 'abcd'),
-        ('john@acorn.nut', 'John Acorn', '780-389-8392','efgasd');
+        ('jane_doe@abc.ca', 'Jane Maria-Ann Doe', '780-342-7584', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
+        ('bob@123.ca', 'Bob Williams', '780-342-2834', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
+        ('maria@xyz.org', 'Maria Calzone', '780-382-3847', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
+        ('the99@oil.com', 'Wayne Gretzky', '780-382-4382','88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
+        ('connor@oil.com', 'Connor Mcdavid', '587-839-2838', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
+        ('don@mayor.yeg', 'Don Iveson', '780-382-8239','88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
+        ('darryl@oil.com', 'Darryl Katz', '604-238-2380', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
+        ('reilly@esks.org', 'Mike Reilly', '780-389-8928', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
+        ('mess@marky.mark', 'Mark Messier', '516-382-8939','88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
+        ('mal@serenity.ca', 'Nathan Fillion', '780-389-2899', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
+        ('kd@lang.ca', 'K. D. Lang', '874-384-3890','88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
+        ('nellie@five.gov', 'Nellie McClung', '389-930-2839','88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
+        ('marty@mc.fly', 'Micheal J. Fox', '780-382-3899','88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
+        ('cadence@rap.fm', 'Roland Pemberton', '780-938-2738', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
+        ('john@acorn.nut', 'John Acorn', '780-389-8392','88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589');
 
 -- |cno|make|model|year|seats|owner|
 insert into cars values
@@ -61,7 +61,7 @@ insert into locations values
         ('ab1', 'Jasper', 'Alberta', 'Jasper Park Lodge');
         --('van3', 'Abbotsford', 'British Columbia', 'Abbotsford Airport');
 
--- |rno|price|rdate|seats|lugDesc|src|dst|driver|cno|
+-- |rno|price|rDate|seats|lugDesc|src|dst|driver|cno|
 insert into rides values
         (1, 50, '2018-11-01', 4, 'Large Bag', 'cntr1', 'yyc1', 'the99@oil.com', 10),
         (2, 50, '2018-11-05', 4, 'Large Bag', 'yyc1', 'cntr2', 'the99@oil.com', 10),
@@ -139,3 +139,24 @@ insert into requests values
         (7, 'mess@marky.mark', '2018-10-11', 'nrth2', 'sth3', 1),
         (8, 'mess@marky.mark', '2018-10-11', 'nrth2', 'sth3', 100),
         (9, 'jane_doe@abc.ca', '2018-04-26', 'cntr3', 'cntr2', 10);
+
+-- |email|msgTimestamp|sender|content|rno|seen|
+insert into inbox values
+    ('the99@oil.com', datetime('now'), 'connor@oil.com', 'looking forward to the ride!', 1, 'N'),
+    ('reilly@esks.org', datetime('now'), 'bob@123.ca', 'sorry for the ride cancellation', 4, 'N'),
+    ('don@mayor.yeg', datetime('now', '-2 hours'), 'marty@mc.fly', 'when would you get here?', 6, 'N'),
+    ('mess@marky.mark', datetime('now'), 'mal@serenity.ca', 'thanks for the ride', 3, 'N'),
+    ('bob@123.ca', datetime('now'), 'reilly@esks.org', 'no worries', 4, 'N'),
+    ('the99@oil.com', datetime('now', '-2 hours'), 'nellie@five.gov', 'that was fun', 2, 'N'),
+    ('the99@oil.com', datetime('now', '-3 hours'), 'kd@lang.ca', 'hi!', 15, 'N'),
+    ('the99@oil.com', datetime('now', '-4 hours'), 'maria@xyz.org', 'can you pick me up earlier?', 22, 'N'),
+    ('bob@123.ca', datetime('now', '-2 hours'), 'cadence@rap.fm', 'whats up?', 31, 'N'),
+    ('the99@oil.com', datetime('now', '-5 hours'), 'john@acorn.nut', 'hi', 20, 'N'),
+    ('don@mayor.yeg', datetime('now', '-6 hours'), 'cadence@rap.fm', 'hello!', 42, 'N'),
+    ('jane_doe@abc.ca', datetime('now'), 'darryl@oil.com', 'yolo', 17, 'N'),
+    ('don@mayor.yeg', datetime('now', '-3 hours'), 'jane_doe@abc.ca', 'bye!', 39, 'N'),
+    ('bob@123.ca', datetime('now', '-4 hours'), 'john@acorn.nut', 'looking forward to it!', 28, 'N'),
+    ('mess@marky.mark', datetime('now', '-2 hours'), 'the99@oil.com', 'check this ride out!', 1, 'N'),
+    ('the99@oil.com', datetime('now', '-7 hours'), 'mess@marky.mark', 'looks amazing!', 1, 'N'),
+    ('the99@oil.com', datetime('now', '-8 hours'), 'cadence@rap.fm', 'thanks for the ride', 25, 'N'),
+    ('don@mayor.yeg', datetime('now', '-4 hours'), 'mal@serenity.ca', 'are you gonna be late?', 33, 'N');
