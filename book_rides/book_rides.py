@@ -21,7 +21,7 @@ class BookRides:
         self.cursor.execute('''
         SELECT r.rno, r.price, r.rdate, r.seats, r.lugDesc, r.src, r.dst, r.driver, r.cno, r.seats-COUNT(b.bno) 
         FROM rides r, bookings b
-        WHERE driver = ':driver'
+        WHERE driver = :driver
         AND r.rno = b.bno 
         GROUP BY r.rno, r.price, r.rdate, r.seats, r.lugDesc, r.src, r.dst, r.driver, r.cno
         ''', {'driver': driver})
@@ -29,7 +29,9 @@ class BookRides:
 
         # create rides dictionary for quick access 
         for ride in self.rides:
-            self.rides_dict[ride[0]] = self.rides[1:]
+            self.rides_dict[ride[0]] = ride[1:]
+        print(self.rides_dict)
+        
         
     def display_rides(self, page_num):
         page = self.rides[page_num*5: min(page_num*5+5, len(self.rides))]
@@ -66,7 +68,7 @@ class BookRides:
         return int(max_bno[0])+1
 
     def verify_email(self, member):
-        self.cursor.execute("SELECT COUNT(email) FROM members WHERE email = ':email'", {'email':member})
+        self.cursor.execute("SELECT COUNT(email) FROM members WHERE email = :email", {'email':member})
         result = self.cursor.fetchone()
         if (int(result[0]) > 0):
             return True 
@@ -82,13 +84,17 @@ class BookRides:
             return False
     
     def verify_location(self, location):
-        self.cursor.execute("SELECT COUNT(lccode) FROM locations WHERE lcode = ':lcode'", {'lcode': location})
-        return True 
+        self.cursor.execute("SELECT COUNT(lcode) FROM locations WHERE lcode = :lcode", {'lcode': location})
+        result = self.cursor.fetchone()
+        if (int(result[0]) > 0):
+            return True
+        else:
+            return False
     
     def book_ride(self):
 
         try:
-            rno = input("Please enter a rno: ")
+            rno = int(input("Please enter a rno: "))
             
             if (not self.verify_rno(rno)):
                 raise InvalidRNOError
@@ -111,6 +117,7 @@ class BookRides:
 
             seats = input("Please enter the number of seats for ride: ")
 
+
             if (int(seats) > self.rides_dict[rno][-1]):
                 overbook = input("Warning: the ride is being over booked, are you sure you want to continue (y/n)")
                 if overbook == 'n':
@@ -121,10 +128,11 @@ class BookRides:
             #get unique booking number
             bno = self.generate_bno()
 
-            query = '''INSERT INTO bookings VALUES ({bno}, {member}, {rno}, {cost}, {seats}, {pickup}, {dropoff})
-                    '''.format(bno = bno, member = member, rno = rno, cost = cost, seats = seats, pickup = pickup, dropoff = dropoff)
+            self.cursor.execute('''INSERT INTO bookings VALUES (:bno, :member, :rno, :cost, :seats, :pickup, :dropoff)
+                                ''', {'bno': bno, 'member': member, 'rno': rno, 'cost': cost, 'seats': seats, 'pickup': pickup, 'dropoff': dropoff})
+
+            print("Ride successfully booked!")
             
-            print(query)
 
         except InvalidRNOError:
             print("Please enter a valid rno") 
