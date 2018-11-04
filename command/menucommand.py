@@ -1,4 +1,5 @@
 from command.command import Command
+from command.offerRideCommand import OfferRideCommand
 
 class MenuCommand(Command):
     def __init__(self, email, cursor):
@@ -17,7 +18,7 @@ class MenuCommand(Command):
 
         opt = opt.lower()
         if opt == 'o':
-            pass
+            OfferRideCommand(self.user, self.cursor).menu()
         elif opt == 's':
             pass
         elif opt == 'b':
