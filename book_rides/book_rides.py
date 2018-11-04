@@ -91,6 +91,10 @@ class BookRides:
         else:
             return False
     
+    def notify_member(member, rno, bno, cost, seats, pickup, dropoff):
+        # tell other member that they are booked on the ride 
+        pass 
+    
     def book_ride(self):
 
         try:
@@ -132,6 +136,8 @@ class BookRides:
                                 ''', {'bno': bno, 'member': member, 'rno': rno, 'cost': cost, 'seats': seats, 'pickup': pickup, 'dropoff': dropoff})
 
             print("Ride successfully booked!")
+
+            #implement messaging system to notify user that they are booked on a ride 
             
 
         except InvalidRNOError:
