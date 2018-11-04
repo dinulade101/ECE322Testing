@@ -17,35 +17,41 @@ class CancelBookingCommand(Command):
         super().__init__(cursor)
         self.email = email
         self.cb = CancelBooking(cursor)
-
-    def main(self):
-        bno_cancel = self.display_all_bookings()
-        if bno_cancel == -1:
-            print()
-        self.cancel_booking(bno_cancel)
+        
 
     def display_all_bookings(self):
 
-        print("Here are all your bookings: ")
         rows = self.cb.get_member_bookings(self.email)
-        #print out all the bookings
-        for i in range(len(rows)):
-            print(str(i+1) + ". " + str(rows[i][1:]))
-        #bno of booking to cancel
-        while(True):
-            uinput = input("Which booking would you like to cancel?(n to cancel): ")
-            #if user cancels, return
-            if uinput.lower() == 'n':
-                return -1
-            try:
-                #return the actualy bno number from the number of the user choice
-                return rows[int(uinput)-1][0]
-            except Exception as e:
-                print(e)
-                print("Invalid Option")
+
+        if len(rows) == 0:
+            print("You do not have any bookings.")
+            return
+        valid_bno = set()
+        for row in rows:
+            valid_bno.add(row[0])
+        
+        self.display_page(0, rows, valid_bno)
 
 
     def cancel_booking(self,bno):
         #delete the booking and create a message for the booker
         self.cb.cancel_booking(self.email, bno)
         print('Booking successfully canceled.')
+    
+    def display_page(self, page_num, rows, valid_bno):
+        page = rows[page_num*5: min(page_num*5+5, len(rows))]
+        for row in page:
+            print(str(row[0]) + '.', end='')
+            print(row[1:])
+        if (page_num*5+5 < len(rows)):
+            user_input = input("To delete a booking, please enter the booking number. To see more bookings enter (y/n)?")
+            if (user_input == 'y'):
+                self.display_page(page_num+1, rows, valid_bno)
+                return
+        else:
+            user_input = input("To cancel a booking, please enter the booking number: ")
+        if user_input.isdigit() and int(user_input) in valid_bno:
+            print("Canceled the following booking with bno: " + user_input)
+            self.cancel_booking(user_input)
+        else:
+            print("Invalid number entered")

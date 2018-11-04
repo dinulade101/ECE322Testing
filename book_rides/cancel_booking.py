@@ -58,7 +58,7 @@ class CancelBooking:
         self.cursor.execute('''
             INSERT INTO inbox
             VALUES ( ?, datetime('now'), ?,
-            "Your ride booking has been deleted. Aplogies for the inconvenience.",
+            "Your ride booking has been canceled. Aplogies for the inconvenience.",
             ?, 'n')
         ''', (deleted_user, deleting_user,rno))
         pass
