@@ -1,10 +1,12 @@
 import sqlite3
 
-class InvalidRNOError(error):
+class Error(Exception):
     pass
-class InvalidMemberError(error):
+class InvalidRNOError(Error):
     pass
-class InvalidLocationError(error):
+class InvalidMemberError(Error):
+    pass
+class InvalidLocationError(Error):
     pass
 
 
@@ -30,15 +32,16 @@ class BookRides:
             print(str(page_num*5+i+1) + '.', end='')
             print(ride)
         if (page_num*5+5 < len(self.rides)):
-            user_input = input("To book a member on a ride, please enter a ride number. To see more rides, please enter (y/n)?")
+            user_input = input("To book a member on a ride, please enter 'b'. To see more rides, please enter 'y'. To exit, press 'e': ")
             if (user_input == 'y'):
                 self.display_rides(page_num+1)
         else:
-            user_input = input("To book a member on a ride, please enter a ride number.")
-        if user_input.isdigit():
-            print("Booking member on ride with rno" + user_input)
-        else:
-            print("Invalid input entered")
+            user_input = input("To book a member on a ride, please enter 'b'. To exit, press 'e': ")
+            if (user_input == 'b'):
+                self.book_ride()
+            else:
+                pass
+             
 
     # def find_seats_remaining(self, rno):
     #     query = '''
@@ -55,7 +58,7 @@ class BookRides:
         query = "SELECT MAX(bno) FROM bookings"
         self.cursor.execute(query)
         max_bno = self.cursor.fetchone()
-        return int(max_bno[0])+1]
+        return int(max_bno[0])+1
 
     def verify_email(self, member):
         return True
@@ -66,34 +69,43 @@ class BookRides:
     def verify_location(self, location):
         return True 
     
-    def book_ride(self, member, rno, cost, seats, pickup, dropoff):
+    def book_ride(self):
 
         try:
             rno = input("Please enter a rno: ")
             
-            if (not verify_rno(rno)):
+            if (not self.verify_rno(rno)):
                 raise InvalidRNOError
 
             member = input("Please enter the email of the member you want to book on the ride: ")
 
-            if (not verify_email(member)):
+            if (not self.verify_email(member)):
                 raise InvalidMemberError
 
             pickup = input("Please enter pick up location code: ")
             dropoff = input("Please enter pick up location code: ")
 
-            if (not (self.verify_location(pickup) AND self.verify_location(dropoff))):
+            if (not self.verify_location(pickup) or not self.verify_location(dropoff)):
                 raise InvalidLocationError
-            
 
-            if (not verify_email(member)):
+            if (not self.verify_email(member)):
                 raise InvalidMemberError
+
+            cost = input("Please enter the cost for ride: ")
+
+            seats = input("Please enter the number of seats for ride: ")
+
+            #if (int(seats) > self.rides[rno]
 
             #get unique booking number
             bno = self.generate_bno()
+            
 
             query = '''INSERT INTO bookings VALUES ({bno}, {member}, {rno}, {cost}, {seats}, {pickup}, {dropoff})
-                    '''.format(bno, member, rno, cost, seats, pickup, dropoff)
+                    '''.format(bno = bno, member = member, rno = rno, cost = cost, seats = seats, pickup = pickup, dropoff = dropoff)
+            
+            print(query)
+
         except InvalidRNOError:
             print("Please enter a valid rno") 
 

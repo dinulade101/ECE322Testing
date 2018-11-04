@@ -57,6 +57,7 @@ def main():
 
     book = BookRides(cursor)
     book.find_rides("connor@oil.com")
+    book.display_rides(0)
 
     connection.commit()
     connection.close()

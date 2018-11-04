@@ -42,6 +42,6 @@ class SearchRequests:
             delete_query = "DELETE FROM requests WHERE rid = {rid}".format(rid = user_input)
             self.cursor.execute(delete_query)
         else:
-            print("Invalid number entered")
+            print("Invalid input entered")
     def delete_request(self):
         pass
