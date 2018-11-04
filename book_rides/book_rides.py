@@ -8,24 +8,29 @@ class InvalidMemberError(Error):
     pass
 class InvalidLocationError(Error):
     pass
+class OverbookError(Error):
+    pass
 
 
 class BookRides:
     def __init__(self, cursor):
         self.cursor = cursor
         self.rides = []
+        self.rides_dict = dict()
     def find_rides(self, driver):
-        query = '''
+        self.cursor.execute('''
         SELECT r.rno, r.price, r.rdate, r.seats, r.lugDesc, r.src, r.dst, r.driver, r.cno, r.seats-COUNT(b.bno) 
         FROM rides r, bookings b
-        WHERE driver = '{driver}'
+        WHERE driver = ':driver'
         AND r.rno = b.bno 
         GROUP BY r.rno, r.price, r.rdate, r.seats, r.lugDesc, r.src, r.dst, r.driver, r.cno
-        '''.format(driver = driver)
-
-        self.cursor.execute(query)
+        ''', {'driver': driver})
         self.rides = self.cursor.fetchall()
 
+        # create rides dictionary for quick access 
+        for ride in self.rides:
+            self.rides_dict[ride[0]] = self.rides[1:]
+        
     def display_rides(self, page_num):
         page = self.rides[page_num*5: min(page_num*5+5, len(self.rides))]
         for ride in page:
@@ -61,8 +66,7 @@ class BookRides:
         return int(max_bno[0])+1
 
     def verify_email(self, member):
-        query = "SELECT COUNT(email) FROM members WHERE email = '{email}'".format(email = member)
-        self.cursor.execute(query)
+        self.cursor.execute("SELECT COUNT(email) FROM members WHERE email = ':email'", {'email':member})
         result = self.cursor.fetchone()
         if (int(result[0]) > 0):
             return True 
@@ -70,8 +74,7 @@ class BookRides:
             return False
 
     def verify_rno(self, rno):
-        query = "SELECT COUNT(rno) FROM rides WHERE rno = {rno}".format(rno = rno)
-        self.cursor.execute(query)
+        self.cursor.execute("SELECT COUNT(rno) FROM rides WHERE rno = :rno", {'rno': rno})
         result = self.cursor.fetchone()
         if (int(result[0]) > 0):
             return True 
@@ -79,6 +82,7 @@ class BookRides:
             return False
     
     def verify_location(self, location):
+        self.cursor.execute("SELECT COUNT(lccode) FROM locations WHERE lcode = ':lcode'", {'lcode': location})
         return True 
     
     def book_ride(self):
@@ -107,11 +111,15 @@ class BookRides:
 
             seats = input("Please enter the number of seats for ride: ")
 
-            #if (int(seats) > self.rides[rno]
+            if (int(seats) > self.rides_dict[rno][-1]):
+                overbook = input("Warning: the ride is being over booked, are you sure you want to continue (y/n)")
+                if overbook == 'n':
+                    raise OverbookError
+                else:
+                    pass
 
             #get unique booking number
             bno = self.generate_bno()
-            
 
             query = '''INSERT INTO bookings VALUES ({bno}, {member}, {rno}, {cost}, {seats}, {pickup}, {dropoff})
                     '''.format(bno = bno, member = member, rno = rno, cost = cost, seats = seats, pickup = pickup, dropoff = dropoff)
@@ -126,6 +134,9 @@ class BookRides:
             self.display_rides(1)
         except InvalidLocationError:
             print("Please enter a valid pickup and dropoff location code")
+            self.display_rides(1)
+        except OverbookError:
+            print("Please select a fewer number of seats")
             self.display_rides(1)
 
     
