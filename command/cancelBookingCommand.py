@@ -7,6 +7,7 @@ as well.
 '''
 import sqlite3
 import re
+import sys
 
 from command.command import Command
 from book_rides.cancel_booking import CancelBooking
@@ -20,6 +21,10 @@ class CancelBookingCommand(Command):
         
 
     def menu(self):
+        
+        print('Welcome to the bookings page.')
+        print('Type "quit" to exit program')
+        print('Press Ctrl-c to return to menu')
 
         rows = self.cb.get_member_bookings(self.email)
 
@@ -45,11 +50,15 @@ class CancelBookingCommand(Command):
             print(row[1:])
         if (page_num*5+5 < len(rows)):
             user_input = input("To delete a booking, please enter the booking number. To see more bookings enter (y/n)?")
+            if user_input == 'quit':
+                sys.exit()
             if (user_input == 'y'):
                 self.display_page(page_num+1, rows, valid_bno)
                 return
         else:
             user_input = input("To cancel a booking, please enter the booking number: ")
+            if user_input == 'quit':
+                sys.exit()
         if user_input.isdigit() and int(user_input) in valid_bno:
             print("Canceled the following booking with bno: " + user_input)
             self.cancel_booking(user_input)
