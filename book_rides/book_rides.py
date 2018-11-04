@@ -28,8 +28,8 @@ class BookRides:
 
     def display_rides(self, page_num):
         page = self.rides[page_num*5: min(page_num*5+5, len(self.rides))]
-        for i, ride in enumerate(page):
-            print(str(page_num*5+i+1) + '.', end='')
+        for ride in page:
+            print(str(ride[0]) + '.', end='')
             print(ride)
         if (page_num*5+5 < len(self.rides)):
             user_input = input("To book a member on a ride, please enter 'b'. To see more rides, please enter 'y'. To exit, press 'e': ")
@@ -61,10 +61,22 @@ class BookRides:
         return int(max_bno[0])+1
 
     def verify_email(self, member):
-        return True
+        query = "SELECT COUNT(email) FROM members WHERE email = '{email}'".format(email = member)
+        self.cursor.execute(query)
+        result = self.cursor.fetchone()
+        if (int(result[0]) > 0):
+            return True 
+        else:
+            return False
 
-    def verify_rno(self, member):
-        return True 
+    def verify_rno(self, rno):
+        query = "SELECT COUNT(rno) FROM rides WHERE rno = {rno}".format(rno = rno)
+        self.cursor.execute(query)
+        result = self.cursor.fetchone()
+        if (int(result[0]) > 0):
+            return True 
+        else:
+            return False
     
     def verify_location(self, location):
         return True 
@@ -108,13 +120,13 @@ class BookRides:
 
         except InvalidRNOError:
             print("Please enter a valid rno") 
-
+            self.display_rides(1)
         except InvalidMemberError:
             print("Please enter a valid member email")
-            self.book_ride()
+            self.display_rides(1)
         except InvalidLocationError:
             print("Please enter a valid pickup and dropoff location code")
-            self.book_ride()
+            self.display_rides(1)
 
     
     
