@@ -4,26 +4,23 @@ class SearchRequests:
         self.email = email
         self.cursor = cursor
     def find_requests(self, location):
-        search_query = '''SELECT r.*
+        self.cursor.execute('''SELECT r.*
         FROM requests r, locations l
         WHERE l.lcode = r.pickup
-        AND r.email = '{email}'
-        AND (l.lcode = '{location}'
-        OR l.city = '{location}'
+        AND r.email = :email
+        AND (l.lcode = :location
+        OR l.city = :location
         ) COLLATE NOCASE
-        '''.format(email = self.email, location = location)
+        ''', {'email': self.email, 'location': location})
 
-        self.cursor.execute(search_query)
         self.requests = self.cursor.fetchall()
 
     def find_requests(self):
-        search_query = '''SELECT r.*
+        self.cursor.execute('''SELECT r.*
         FROM requests r, locations l
         WHERE l.lcode = r.pickup
-        AND r.email = '{email}'
-        '''.format(email = self.email)
-
-        self.cursor.execute(search_query)
+        AND r.email = :email
+        ''', {'email': self.email})
         self.requests = self.cursor.fetchall()
 
     def display_results(self, page_num):
@@ -35,13 +32,16 @@ class SearchRequests:
             user_input = input("To delete a request, please enter the reqest number. To see more requests more requests enter (y/n)?")
             if (user_input == 'y'):
                 self.display_results(page_num+1)
+                return
         else:
             user_input = input("To delete a request, please enter the reqest number: ")
         if user_input.isdigit():
             print("Deleted the following request with rid: " + user_input)
-            delete_query = "DELETE FROM requests WHERE rid = {rid}".format(rid = user_input)
-            self.cursor.execute(delete_query)
+            self.cursor.execute("DELETE FROM requests WHERE rid = :rid", {'rid': user_input})
         else:
-            print("Invalid number entered")
-    def delete_request(self):
-        pass
+            print("Invalid input entered")
+            self.display_results(0)
+
+    def delete_request(self, user_input):
+        print("Deleted the following request with rid: " + user_input)
+        self.cursor.execute("DELETE FROM requests WHERE rid = :rid", {'rid': user_input})
