@@ -1,4 +1,5 @@
 import sqlite3
+from messaging.message import Message
 
 class BookRides:
     def __init__(self, cursor, user):
@@ -125,6 +126,9 @@ class BookRides:
         self.cursor.execute('''INSERT INTO bookings VALUES (:bno, :member, :rno, :cost, :seats, :pickup, :dropoff)
                             ''', {'bno': bno, 'member': member, 'rno': rno, 'cost': cost, 'seats': seats, 'pickup': pickup, 'dropoff': dropoff})
 
+        msg = '''Hi {0}, you've been booked on a ride (ride no: {1}).
+        Your booking reference number is {2}. You have booked {3} seats at ${4} per seat.
+        Your pickup location is {5} and dropoff is {6}'''.format(member, rno, bno, seats, cost, pickup, dropoff)
+        
+        Message(self.cursor).new(self.user, member, msg ,rno)
         print("Ride successfully booked, message sent to the user!")
-
-        # implement messaging system to notify user that they are booked on a ride
