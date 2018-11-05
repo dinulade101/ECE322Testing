@@ -92,7 +92,6 @@ class SearchRides:
         print("Luggage Description: "+ str(ride[4]))
         print("Start: "+ str(ride[5]))
         print("Destination: "+ str(ride[6]))
-<<<<<<< HEAD
         if (len(ride) >= 8):
             print("Driver: "+ str(ride[7]))
             print("Car number: "+ str(ride[8]))
@@ -102,10 +101,6 @@ class SearchRides:
             print("Car seats: "+ str(ride[13]))
             print("Car owner: "+ str(ride[14]))
         print('')
-=======
-        print("Driver: "+ str(ride[7]))
-        print("Car Number: "+ str(ride[8]) + '\n')
->>>>>>> c9d884d3f7bc8afcad676ee0496cb67057db85ee
 
     def menu(self):
         user_input = input("Please enter 1-3 location key words each seperated by a comma: ").split(',')

@@ -36,7 +36,6 @@ class SearchRequests:
         AND r.email = :email
         ''', {'email': self.email})
         self.requests = self.cursor.fetchall()
-<<<<<<< HEAD
         if (len(self.requests) > 0):
             print('')
             for request in self.requests:
@@ -45,9 +44,6 @@ class SearchRequests:
         else:
             print("No results found for you. Press Ctrl + C return to main menu.")
     
-=======
-
->>>>>>> c9d884d3f7bc8afcad676ee0496cb67057db85ee
     def format_request(self, ride):
         print("The ride request number is: "+ str(ride[0]))
         print("Email: "+ str(ride[1]))
