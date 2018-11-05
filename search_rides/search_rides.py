@@ -112,7 +112,8 @@ class SearchRides:
         :param page_num: specifies which page of rides to be shown (5 rides per page)
         :returns: None
         """
-        #check if page num is valid
+        if page_num == 0:
+            print()
         page = self.rides[page_num*5: min(page_num*5+5, len(self.rides))]
         for ride in page:
             print(str(ride[0]) + '.', end='')
