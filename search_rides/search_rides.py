@@ -67,6 +67,11 @@ class SearchRides:
 
         self.cursor.execute(search_query)
         self.rides = self.cursor.fetchall()
+        if (len(self.rides) == 0):
+            print("No result found for the following keywords. Please try again.")
+            self.menu()
+            return
+        self.display_rides(0)
 
     def format_ride(self, ride):
         print("The ride number is: "+ str(ride[0]))
@@ -78,6 +83,19 @@ class SearchRides:
         print("Destination: "+ str(ride[6]))
         print("Driver: "+ str(ride[7]))
         print("Car number: "+ str(ride[8]) + '\n')
+
+    def menu(self):
+        user_input = input("Please enter 1-3 location key words each seperated by a comma: ").split(',')
+        if (len(user_input) > 3 or len(user_input) == 0 or user_input[0] == ''):
+            print("Please enter a valid set of key words. Otherwise, to return to main menu press Ctrl + C: ")
+            self.menu()
+            return
+        print(user_input)
+        for index in range(len(user_input)):
+            user_input[index] = user_input[index].strip()
+
+        self.find_rides(user_input)
+        self.display_rides(0)
 
     def display_rides(self, page_num):
         """
@@ -93,17 +111,18 @@ class SearchRides:
             #print(ride)
             self.format_ride(ride)
         if (page_num*5+5 < len(self.rides)):
-            user_input = input("To message the poster of a ride, please enter the ride number. See more rides (y/n)?")
+            user_input = input("To message the poster of a ride, please enter the ride number. See more rides press 'y'. Otherwise, to return to main menu press Ctrl + C: ")
             if (user_input == 'y'):
                 self.display_rides(page_num+1)
                 return
         else:
-            user_input = input("To message the poster of a ride, please enter the ride number: ")
+            user_input = input("To message the poster of a ride, please enter the ride number: Otherwise, to return to main menu press Ctrl + C: ")
         if user_input.isdigit():
             self.message_member(user_input)
         else:
             print("Invalid input entered")
             self.display_rides(0)
+
 
             
     def message_member(self, user_input):
