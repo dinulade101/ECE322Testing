@@ -77,6 +77,11 @@ class OfferRideCommand(Command):
 
     @staticmethod
     def validateDate(date):
-        if re.match("^(\d){4}-(0\d|1[0-2])-([0-2]\d|3[0-1])$", date):
-            return True
-        return False
+        if not re.match("^(\d){4}-(0\d|1[0-2])-([0-2]\d|3[0-1])$", date):
+            return False
+        try:
+            dateArr = date.split("-")
+            date = datetime(int(dateArr[0]), int(dateArr[1]), int(dateArr[2]))
+        except:
+            return False
+        return True

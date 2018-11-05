@@ -14,7 +14,7 @@ class BookingCommand(Command):
         print('\nCreate or Cancel a Booking:\n\nTo go back to main menu at any time, press Ctrl + C\n')
 
         user_input = input('''Select one of the following: \n
-        1) View/Create a booking \n
+        1) View Rides/Create a booking \n
         2) View/Cancel a booking \n
         quit) Quit\n''')
 

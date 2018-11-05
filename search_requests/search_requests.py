@@ -59,7 +59,7 @@ class SearchRequests:
     def display_results(self, page_num):
         page = self.requests[page_num*5: min(page_num*5+5, len(self.requests))]
         for ride in page:
-            print(str(ride[0]) + '.', end='')
+            #print(str(ride[0]) + '.', end='')
             self.format_request(ride)
         if (page_num*5+5 < len(self.requests)):
             user_input = input("To delete a request, please enter the request number. To see more requests more requests enter (y/n): ")
@@ -71,7 +71,7 @@ class SearchRequests:
         if user_input.isdigit():
             self.delete_request(user_input)
         else:
-            print("Invalid input entered")
+            print("Invalid input entered \n")
             self.display_results(0)
 
     def display_results_location(self, page_num):
