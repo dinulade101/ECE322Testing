@@ -22,6 +22,5 @@ class SearchRequestsCommand(Command):
         elif user_input == '2':
             location = input("Please enter a lcode or city name: ")
             search.find_requests_by_location(location)
-            search.display_results_location(0)
         elif user_input == 'quit':
             sys.exit(0)

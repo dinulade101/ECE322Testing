@@ -15,6 +15,13 @@ class SearchRequests:
         ''', {'email': self.email, 'location': location})
 
         self.requests = self.cursor.fetchall()
+        if (len(self.requests) > 0):
+            print('')
+            self.display_results_location(0)
+        else:
+            print("No results found for location, try again.")
+            location = input("Please enter a lcode or city name: ")
+            self.find_requests_by_location(location)
 
     def find_requests(self):
         self.cursor.execute('''SELECT r.*
@@ -59,12 +66,12 @@ class SearchRequests:
             print(str(ride[0]) + '.', end='')
             self.format_request(ride)
         if (page_num*5+5 < len(self.requests)):
-            user_input = input("To message the poster of a request, please enter the reqest number. To see more requests more requests enter (y/n)?")
+            user_input = input("To message the poster of a request, please enter the reqest number. To see more requests more requests enter 'y'. \n To exit to main menu, press Ctrl + C: ")
             if (user_input == 'y'):
                 self.display_results(page_num+1)
                 return
         else:
-            user_input = input("To message the poster of a request, please enter the reqest number: ")
+            user_input = input("To message the poster of a request, please enter the reqest number. \n To exit to main menu, press Ctrl + C: ")
         if user_input.isdigit():
             self.message_member(user_input)
         else:
