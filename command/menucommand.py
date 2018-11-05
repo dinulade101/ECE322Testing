@@ -2,7 +2,7 @@ import sys
 from command.command import Command
 from command.offerRideCommand import OfferRideCommand
 from command.postCommand import PostCommand
-from search_requests.search_requests import SearchRequests
+from command.searchRequestsCommand import SearchRequestsCommand
 from search_rides.search_rides import SearchRides
 
 
@@ -16,9 +16,9 @@ class MenuCommand(Command):
         opt = input('''Select option!\n
         o/O) Offer ride\n
         s/S) Search rides\n
-        b/B) Book or cancel your bookings\n
+        b/B) Book or Cancel your bookings\n
         r/R) Make a ride request\n
-        v/V) Search or delete ride requests\n
+        v/V) Search or Delete ride requests\n
         l/L) Logout\n
         quit) Quit\n''')
 
@@ -35,15 +35,7 @@ class MenuCommand(Command):
         elif opt == 'r':
             PostCommand(self.cursor, self.user).menu()
         elif opt == 'v':
-            search = SearchRequests(self.cursor, self.user)
-            user_input = input('''Select one of the following: \n 1) View and modify your ride requests \n 2) View ride requests by location \n''')
-            if user_input == '1':
-                search.find_requests()
-                search.display_results(0)
-            elif user_input == '2':
-                location = input("Please enter a lcode or city name: ")
-                search.find_requests_by_location(location)
-                search.display_results_location(0)
+            SearchRequestsCommand(self.cursor, self.user).menu()
         elif opt == 'l':
             return False
         elif opt == 'quit':
