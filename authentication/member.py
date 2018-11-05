@@ -12,12 +12,8 @@ class Member:
 
     @staticmethod
     def signup(email, name, phone, pwd, cursor):
-        cursor.execute("INSERT INTO members VALUES (?, ?, ?, ?)", (email, name, phone, Member.hash(pwd)))
+        cursor.execute("INSERT INTO members VALUES (?, ?, ?, ?)", (email, name, phone, pwd))
         return Member(email, pwd, cursor)
-
-    @staticmethod
-    def hash(pwd):
-        return hashlib.sha256(pwd.encode()).hexdigest()
 
     @staticmethod
     def checkIfExists(cursor, email):
@@ -29,7 +25,7 @@ class Member:
     def login(self, pwd):
         self.cursor.execute("SELECT pwd FROM members WHERE email=:email", {"email":self.email})
         result = self.cursor.fetchone()
-        if result == None or result[0] != Member.hash(pwd):
+        if result == None or result[0] != pwd:
             return False
         return True
 

@@ -3,21 +3,21 @@
 
 -- |email|name|phone|pwd  passwords set to abcd (hashed)
 insert into members values
-        ('jane_doe@abc.ca', 'Jane Maria-Ann Doe', '780-342-7584', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
-        ('bob@123.ca', 'Bob Williams', '780-342-2834', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
-        ('maria@xyz.org', 'Maria Calzone', '780-382-3847', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
-        ('the99@oil.com', 'Wayne Gretzky', '780-382-4382','88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
-        ('connor@oil.com', 'Connor Mcdavid', '587-839-2838', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
-        ('don@mayor.yeg', 'Don Iveson', '780-382-8239','88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
-        ('darryl@oil.com', 'Darryl Katz', '604-238-2380', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
-        ('reilly@esks.org', 'Mike Reilly', '780-389-8928', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
-        ('mess@marky.mark', 'Mark Messier', '516-382-8939','88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
-        ('mal@serenity.ca', 'Nathan Fillion', '780-389-2899', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
-        ('kd@lang.ca', 'K. D. Lang', '874-384-3890','88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
-        ('nellie@five.gov', 'Nellie McClung', '389-930-2839','88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
-        ('marty@mc.fly', 'Micheal J. Fox', '780-382-3899','88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
-        ('cadence@rap.fm', 'Roland Pemberton', '780-938-2738', '88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589'),
-        ('john@acorn.nut', 'John Acorn', '780-389-8392','88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589');
+        ('jane_doe@abc.ca', 'Jane Maria-Ann Doe', '780-342-7584', 'abcd'),
+        ('bob@123.ca', 'Bob Williams', '780-342-2834', 'abcd'),
+        ('maria@xyz.org', 'Maria Calzone', '780-382-3847', 'abcd'),
+        ('the99@oil.com', 'Wayne Gretzky', '780-382-4382','abcd'),
+        ('connor@oil.com', 'Connor Mcdavid', '587-839-2838', 'abcd'),
+        ('don@mayor.yeg', 'Don Iveson', '780-382-8239','abcd'),
+        ('darryl@oil.com', 'Darryl Katz', '604-238-2380', 'abcd'),
+        ('reilly@esks.org', 'Mike Reilly', '780-389-8928', 'abcd'),
+        ('mess@marky.mark', 'Mark Messier', '516-382-8939','abcd'),
+        ('mal@serenity.ca', 'Nathan Fillion', '780-389-2899', 'abcd'),
+        ('kd@lang.ca', 'K. D. Lang', '874-384-3890','abcd'),
+        ('nellie@five.gov', 'Nellie McClung', '389-930-2839','abcd'),
+        ('marty@mc.fly', 'Micheal J. Fox', '780-382-3899','abcd'),
+        ('cadence@rap.fm', 'Roland Pemberton', '780-938-2738', 'abcd'),
+        ('john@acorn.nut', 'John Acorn', '780-389-8392','abcd');
 
 -- |cno|make|model|year|seats|owner|
 insert into cars values
