@@ -23,13 +23,12 @@ class SearchRides:
         AND l2.lcode = r.dst
         AND e.rno = r.rno 
         AND l3.lcode = e.lcode
-        AND c.cno = r.cno
-        AND ('''
+        AND c.cno = r.cno'''
 
         for index, word in enumerate(key_words):
             if (index != 0):
-                search_query += 'OR '
-            search_query += '''l1.lcode LIKE '%{key_word}%'   
+                search_query += ''
+            search_query += ''' AND (l1.lcode LIKE '%{key_word}%'   
             OR l1.city LIKE '%{key_word}%' 
             OR l1.prov LIKE '%{key_word}%'  
             OR l1.address LIKE '%{key_word}%' 
@@ -41,20 +40,19 @@ class SearchRides:
             OR l3.city LIKE '%{key_word}%' 
             OR l3.prov LIKE '%{key_word}%'  
             OR l3.address LIKE '%{key_word}%' 
-            '''.format(key_word = word)
+            )'''.format(key_word = word)
 
         search_query_no_enroute = '''
         SELECT r.*, c.*
         FROM rides r, locations l1, locations l2, cars c
         WHERE l1.lcode = r.src
         AND l2.lcode = r.dst
-        AND c.cno = r.cno
-        AND ('''
+        AND c.cno = r.cno'''
 
         for index, word in enumerate(key_words):
             if (index != 0):
-                search_query_no_enroute += 'OR '
-            search_query_no_enroute += '''l1.lcode LIKE '%{key_word}%'   
+                search_query_no_enroute += ''
+            search_query_no_enroute += ''' AND (l1.lcode LIKE '%{key_word}%'   
             OR l1.city LIKE '%{key_word}%' 
             OR l1.prov LIKE '%{key_word}%'  
             OR l1.address LIKE '%{key_word}%' 
@@ -62,14 +60,13 @@ class SearchRides:
             OR l2.city LIKE '%{key_word}%' 
             OR l2.prov LIKE '%{key_word}%'  
             OR l2.address LIKE '%{key_word}%' 
-            '''.format(key_word = word)
+            )'''.format(key_word = word)
 
 
-        search_query += ') UNION' + search_query_no_enroute + ') COLLATE NOCASE'
+        search_query += ' UNION' + search_query_no_enroute + ' COLLATE NOCASE'
 
         self.cursor.execute(search_query)
         self.rides = self.cursor.fetchall()
-        self.cursor.execute("INSERT INTO inbox VALUES ('the99@oil.com', datetime('now'), 'the99@oil.com', 'hello', 9, 'N')")
 
     def format_ride(self, ride):
         print("The ride number is: "+ str(ride[0]))

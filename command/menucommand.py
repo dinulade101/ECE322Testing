@@ -4,7 +4,8 @@ from command.offerRideCommand import OfferRideCommand
 from command.postCommand import PostCommand
 from search_requests.search_requests import SearchRequests
 from search_rides.search_rides import SearchRides
-
+from book_rides.book_rides import BookRides
+from command import cancelBookingCommand
 
 class MenuCommand(Command):
     def __init__(self, email, cursor):
@@ -31,6 +32,7 @@ class MenuCommand(Command):
             search.find_rides(user_input)
             search.display_rides(0)
         elif opt == 'b':
+            cancelBookingCommand(self.cursor, self.user)
             pass
         elif opt == 'r':
             PostCommand(self.cursor, self.user).menu()
