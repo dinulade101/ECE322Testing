@@ -1,12 +1,14 @@
-from messaging.message import Message 
+from messaging.message import Message
 
 class SearchRequests:
+
     def __init__(self, cursor, email):
         self.requests = []
         self.requests_dict = dict()
         self.email = email
         self.cursor = cursor
         self.location = ""
+
     def find_requests_by_location(self, location):
         self.cursor.execute('''SELECT r.*
         FROM requests r, locations l
@@ -27,7 +29,7 @@ class SearchRequests:
             print("No results found for location, try again.")
             location = input("Please enter a lcode or city name: ")
             self.find_requests_by_location(location)
-        
+
 
     def find_requests(self):
         self.cursor.execute('''SELECT r.*
@@ -43,7 +45,7 @@ class SearchRequests:
             self.display_results(0)
         else:
             print("No results found for you. Press Ctrl + C return to main menu.")
-    
+
     def format_request(self, ride):
         print("The ride request number is: "+ str(ride[0]))
         print("Email: "+ str(ride[1]))
@@ -78,19 +80,19 @@ class SearchRequests:
             print(str(ride[0]) + '.', end='')
             self.format_request(ride)
         if (page_num*5+5 < len(self.requests)):
-            user_input = input("To message the poster of a request, please enter the reqest number. To see more requests enter 'y' : ")
+            user_input = input("To message the poster of a request, please enter the request number. To see more requests enter 'y': ")
             if (user_input == 'y'):
                 self.display_results_location(page_num+1)
                 return
         else:
-            user_input = input("To message the poster of a request, please enter the reqest number : ")
+            user_input = input("To message the poster of a request, please enter the request number: ")
         if user_input.isdigit():
             self.message_member(user_input)
         else:
             print("Invalid input entered")
             next = input("Press any key to try again. or, press Ctrl + C to return to main menu.")
             if next:
-                self.find_requests_by_location(self.location)              
+                self.find_requests_by_location(self.location)
 
     def message_member(self, user_input):
         if (int(user_input) in self.requests_dict.keys()):
@@ -99,13 +101,13 @@ class SearchRequests:
             email = self.cursor.fetchone()[0]
 
             message_body = input("Please enter the message you want to send " + email + "\n")
+            
+            handler.new(self.email, email, message_body, user_input)
 
-            self.cursor.execute("INSERT INTO inbox VALUES (:rcvr, datetime('now'), :sndr, :content, :rno, 'N')", {'rcvr':self.email, 'sndr':email, 'content':message_body, 'rno':'NULL'})
-            print("Successfully sent " + email + " with message: \n"+message_body)
+            print("Successfully sent " + email + " with message: \n" + message_body)
             self.find_requests_by_location(self.location)
-            #handler.new(self.email, email, message_body, 'NULL')
         else:
-            user_input = input("Invalid entry. Please enter a rid again: ")
+            user_input = input("Invalid entry. Please enter a valid request number: ")
             self.message_member(user_input)
 
 
@@ -117,5 +119,3 @@ class SearchRequests:
         else:
             user_input = input("Invalid entry. Please enter a rid again: ")
             self.delete_request(user_input)
-
-

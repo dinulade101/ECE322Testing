@@ -124,6 +124,7 @@ class SearchRides:
         :param page_num: specifies which page of rides to be shown (5 rides per page)
         :returns: None
         """
+        user_input = 0
         if page_num == 0:
             print()
         page = self.rides[page_num*5: min(page_num*5+5, len(self.rides))]
@@ -131,18 +132,13 @@ class SearchRides:
             print(str(ride[0]) + '.', end='')
             self.format_ride(ride)
         if (page_num*5+5 < len(self.rides)):
-            user_input = input("To see more rides enter 'y', To message the poster of a ride, enter the ride number:  ")
+            user_input = input("To see more rides enter 'y'. Else to message the poster of a ride, enter the ride number:  ")
             if (user_input == 'y'):
                 self.display_rides(page_num+1)
                 return
-        else:
-            user_input = input("To message the poster of a ride, please enter the ride number: ")
-        if user_input.isdigit() and self.containsRno(user_input):
-            self.message_member(user_input)
-        else:
-            print("\nInvalid input entered, please select from ride number displayed")
-            self.display_rides(page_num)
-
+        while not user_input.isdigit() and not self.containsRno(user_input):
+            user_input = input("Invalid entry, please select a ride number from the options: ")
+        self.message_member(user_input)
 
     def message_member(self, user_input):
         if (user_input.isdigit() and int(user_input) in self.rides_dict):
@@ -151,13 +147,10 @@ class SearchRides:
             email = self.cursor.fetchone()[0]
 
             message_body = input("Please enter the message you want to send " + email + "\n")
-            
+
             print("Successfully sent " + email + " with message: \n"+message_body)
             handler.new(self.email, email, message_body, user_input)
             print('')
         else:
             error = input("Invalid entry. To message the poster of a ride, please enter the ride number: ")
             self.message_member(error)
-        
-
-    
