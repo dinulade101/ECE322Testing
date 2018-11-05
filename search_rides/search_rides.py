@@ -1,9 +1,11 @@
 import sqlite3
+from messaging.message import Message 
 
 class SearchRides:
-    def __init__(self, cursor):
+    def __init__(self, cursor, email):
         self.cursor = cursor
         self.rides = []
+        self.email = email
     def is_key_word_valid(self,word):
         return word
     def find_rides(self, key_words):
@@ -78,14 +80,34 @@ class SearchRides:
         """
         #check if page num is valid
         page = self.rides[page_num*5: min(page_num*5+5, len(self.rides))]
-        for i, ride in enumerate(page):
-            print(str(page_num*5+i+1) + '.', end='')
-            print(ride)
+        for ride in page:
+            print(str(ride[0]) + '.', end='')
+            print(ride[1:])
         if (page_num*5+5 < len(self.rides)):
-            user_input = input("See more rides (y/n)?")
+            user_input = input("To message the poster of a ride, please enter the ride number. See more rides (y/n)?")
             if (user_input == 'y'):
                 self.display_rides(page_num+1)
+                return
+        else:
+            user_input = input("To message the poster of a ride, please enter the ride number: ")
+        if user_input.isdigit():
+            self.message_member(user_input)
+        else:
+            print("Invalid input entered")
+            self.display_rides(0)
+
             
+    def message_member(self, user_input):
+        handler = Message(self.cursor)
+        self.cursor.execute("SELECT driver FROM rides WHERE rno = :user_input", {'user_input': user_input})
+        email = self.cursor.fetchone()[0]
+        print(email)
+
+        message_body = input("Please enter the message you want to send " + email + "\n")
+
+        self.cursor.execute("INSERT INTO inbox VALUES (:rcvr, datetime('now'), :sndr, :content, :rno, 'N')", {'rcvr':self.email, 'sndr':email, 'content':message_body, 'rno':'NULL'})
+        print("Successfully sent " + email + " with message: \n"+message_body)
+        #handler.new(self.email, email, message_body, 'NULL')
 
         
 

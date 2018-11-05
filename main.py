@@ -4,6 +4,8 @@ import os.path
 from authentication.member import Member
 from command.membercommand import MemberCommand
 from command.menucommand import MenuCommand
+from search_requests.search_requests import SearchRequests
+from messaging.message import Message
 
 connection = None
 cursor = None
@@ -48,6 +50,24 @@ def main():
                 user.logout()
     connection.commit()
     connection.close()
+
+
+
+    # search = SearchRequests(cursor, 'the99@oil.com')
+    # user_input = input('''
+    #     Select one of the following: \n
+    #     1) View and modify your ride requests \n
+    #     2) View ride requests by location \n
+    # ''')
+    # if user_input == '1':
+    #     search.find_requests()
+    #     search.display_results(0)
+    # elif user_input == '2':
+    #     location = input("Please enter a lcode or city name: ")
+    #     search.find_requests_by_location(location)
+    #     search.display_results_location(0)
+
+
 
     return
 
