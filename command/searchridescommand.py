@@ -8,6 +8,7 @@ class SearchRidesCommand(Command):
 
     def menu(self):
         search = SearchRides(self.cursor, self.user)
+        print('\nSearch for a Ride:\n\nTo go back to main menu at any time, press Ctrl + C\n')
         user_input = input("Please enter 1-3 location key words each seperated by a comma: ").split(',')
         if (len(user_input) > 3 or len(user_input) == 0 or user_input[0] == ''):
             print("Please enter a valid set of key words. Otherwise, to return to main menu press Ctrl + C")

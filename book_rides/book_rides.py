@@ -13,26 +13,33 @@ class OverbookError(Error):
 
 
 class BookRides:
-    def __init__(self, cursor):
+    def __init__(self, cursor, user):
         self.cursor = cursor
         self.rides = []
         self.rides_dict = dict()
+        self.user = user
+
+    def menu(self):
+        self.find_rides(self.user)
+        self.display_rides(0)
+
+
     def find_rides(self, driver):
         self.cursor.execute('''
-        SELECT r.rno, r.price, r.rdate, r.seats, r.lugDesc, r.src, r.dst, r.driver, r.cno, r.seats-COUNT(b.bno) 
+        SELECT r.rno, r.price, r.rdate, r.seats, r.lugDesc, r.src, r.dst, r.driver, r.cno, r.seats-COUNT(b.bno)
         FROM rides r, bookings b
         WHERE driver = :driver
-        AND r.rno = b.bno 
+        AND r.rno = b.bno
         GROUP BY r.rno, r.price, r.rdate, r.seats, r.lugDesc, r.src, r.dst, r.driver, r.cno
         ''', {'driver': driver})
         self.rides = self.cursor.fetchall()
 
-        # create rides dictionary for quick access 
+        # create rides dictionary for quick access
         for ride in self.rides:
             self.rides_dict[ride[0]] = ride[1:]
         print(self.rides_dict)
-        
-        
+
+
     def display_rides(self, page_num):
         page = self.rides[page_num*5: min(page_num*5+5, len(self.rides))]
         for ride in page:
@@ -48,18 +55,7 @@ class BookRides:
                 self.book_ride()
             else:
                 pass
-             
 
-    # def find_seats_remaining(self, rno):
-    #     query = '''
-    #     SELECT r.seats-COUNT(b.bno) FROM rides r, bookings b 
-    #     WHERE r.rno = {rno}
-    #     AND b.rno = {rno}
-    #     '''.format(rno = rno)
-
-    #     self.cursor.execute(query)
-    #     rows = self.cursor.fetchone()
-    #     return int(rows[0])
 
     def generate_bno(self):
         query = "SELECT MAX(bno) FROM bookings"
@@ -71,7 +67,7 @@ class BookRides:
         self.cursor.execute("SELECT COUNT(email) FROM members WHERE email = :email", {'email':member})
         result = self.cursor.fetchone()
         if (int(result[0]) > 0):
-            return True 
+            return True
         else:
             return False
 
@@ -79,10 +75,10 @@ class BookRides:
         self.cursor.execute("SELECT COUNT(rno) FROM rides WHERE rno = :rno", {'rno': rno})
         result = self.cursor.fetchone()
         if (int(result[0]) > 0):
-            return True 
+            return True
         else:
             return False
-    
+
     def verify_location(self, location):
         self.cursor.execute("SELECT COUNT(lcode) FROM locations WHERE lcode = :lcode", {'lcode': location})
         result = self.cursor.fetchone()
@@ -90,16 +86,16 @@ class BookRides:
             return True
         else:
             return False
-    
+
     def notify_member(member, rno, bno, cost, seats, pickup, dropoff):
-        # tell other member that they are booked on the ride 
-        pass 
-    
+        # tell other member that they are booked on the ride
+        pass
+
     def book_ride(self):
 
         try:
             rno = int(input("Please enter a rno: "))
-            
+
             if (not self.verify_rno(rno)):
                 raise InvalidRNOError
 
@@ -137,11 +133,11 @@ class BookRides:
 
             print("Ride successfully booked!")
 
-            #implement messaging system to notify user that they are booked on a ride 
-            
+            #implement messaging system to notify user that they are booked on a ride
+
 
         except InvalidRNOError:
-            print("Please enter a valid rno") 
+            print("Please enter a valid rno")
             self.display_rides(1)
         except InvalidMemberError:
             print("Please enter a valid member email")
@@ -152,7 +148,3 @@ class BookRides:
         except OverbookError:
             print("Please select a fewer number of seats")
             self.display_rides(1)
-
-    
-    
-

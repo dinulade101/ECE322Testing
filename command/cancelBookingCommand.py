@@ -1,6 +1,6 @@
 '''
 This file deals with all the commands to allow the user to cancel bookings.
-It will initially display all the user's bookings. Then the user will select 
+It will initially display all the user's bookings. Then the user will select
 the number of the booking displayed to cancel. The row of the booking in the db
 will be removed. The member who's booking was canceled will get an automated message
 as well.
@@ -18,10 +18,10 @@ class CancelBookingCommand(Command):
         super().__init__(cursor)
         self.email = email
         self.cb = CancelBooking(cursor)
-        
+
 
     def menu(self):
-        
+
         print('Welcome to the bookings page.')
         print('Type "quit" to exit program')
         print('Press Ctrl-c to return to menu')
@@ -34,7 +34,7 @@ class CancelBookingCommand(Command):
         valid_bno = set()
         for row in rows:
             valid_bno.add(row[0])
-        
+
         self.display_page(0, rows, valid_bno)
 
 
@@ -42,7 +42,7 @@ class CancelBookingCommand(Command):
         #delete the booking and create a message for the booker
         self.cb.cancel_booking(self.email, bno)
         print('Booking successfully canceled.')
-    
+
     def display_page(self, page_num, rows, valid_bno):
         page = rows[page_num*5: min(page_num*5+5, len(rows))]
         for row in page:

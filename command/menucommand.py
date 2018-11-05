@@ -3,10 +3,8 @@ from command.command import Command
 from command.offerRideCommand import OfferRideCommand
 from command.postCommand import PostCommand
 from command.searchRequestsCommand import SearchRequestsCommand
-from search_rides.search_rides import SearchRides
-from book_rides.book_rides import BookRides
-from command import cancelBookingCommand
 from command.searchridescommand import SearchRidesCommand
+from command.bookingCommand import BookingCommand
 
 class MenuCommand(Command):
     def __init__(self, email, cursor):
@@ -30,10 +28,9 @@ class MenuCommand(Command):
         elif opt == 's':
             SearchRidesCommand(self.cursor, self.user).menu()
         elif opt == 'b':
-            cancelBookingCommand(self.cursor, self.user)
-            pass
+            BookingCommand( self.cursor, self.user).menu()
         elif opt == 'r':
-            PostCommand(self.cursor, self.user).menu()
+            PostCommand(self.user,self.cursor).menu()
         elif opt == 'v':
             SearchRequestsCommand(self.cursor, self.user).menu()
         elif opt == 'l':
