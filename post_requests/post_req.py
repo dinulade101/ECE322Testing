@@ -28,7 +28,7 @@ class PostReq:
             rid = self.cursor.fetchone()[0] + 1
         except(TypeError):
             rid = 1
-        print(rid)
+        
         values['rid'] = rid
 
         self.cursor.execute('INSERT INTO requests VALUES (:rid, :email, :rdate, :pickup, :dropoff, :amount);',values)

@@ -16,6 +16,11 @@ class CancelBooking:
         return self.cursor.fetchall()
 
     def cancel_booking(self, m_email, bno):
+        '''
+        Call this function to cancel the booking
+        :param m_email: The email of the booking driver
+        :param bno: bno of the booking
+        '''
         deleted_email, rno_deleted = self.delete_booking(bno)
         self.message_deleted_user(m_email ,deleted_email, rno_deleted)
 
@@ -53,7 +58,7 @@ class CancelBooking:
         self.cursor.execute('''
             INSERT INTO inbox
             VALUES ( ?, datetime('now'), ?,
-            "Your ride booking has been deleted. Aplogies for the inconvenience.",
+            "Your ride booking has been canceled. Aplogies for the inconvenience.",
             ?, 'n')
         ''', (deleted_user, deleting_user,rno))
         pass

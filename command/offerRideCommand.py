@@ -10,7 +10,7 @@ class OfferRideCommand(Command):
         self.ofr = OfferRide(email, cursor)
 
     def menu(self):
-        print('To go back to main menu at any time, press Ctrl + C')
+        print('\nOffer a Ride:\n\nTo go back to main menu at any time, press Ctrl + C\n')
 
         date = input("Enter a date for this ride (YYYY-MM-DD): ")
         while not OfferRideCommand.validateDate(date):
@@ -41,7 +41,7 @@ class OfferRideCommand(Command):
         while len(locs) == 0:
             dst = input('No matching locations found! Enter another keyword: ')
             locs = self.ofr.findLocations(dst)
-        src = self.ofr.getLocationFrom(locs)
+        dst = self.ofr.getLocationFrom(locs)
 
         cno = input("Do you want to add your car for this ride (y/n)?: ")
         while not cno.lower() in ['y', 'n']:
@@ -73,6 +73,7 @@ class OfferRideCommand(Command):
             enroutes.append(enrCode)
 
         self.ofr.newOffer(date, nso, ppc, lugDesc, src, dst, cno, enroutes)
+        print('Ride offered successfully!\n')
 
     @staticmethod
     def validateDate(date):
