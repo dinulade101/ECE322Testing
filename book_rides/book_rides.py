@@ -19,7 +19,7 @@ class BookRides:
         self.rides_dict = dict()
         self.user = user
     
-    def main(self):
+    def menu(self):
         self.find_rides(self.user)
         self.display_rides(0)
         
