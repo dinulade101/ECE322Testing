@@ -1,8 +1,10 @@
 import sys
 from command.command import Command
 from command.offerRideCommand import OfferRideCommand
+from command.postCommand import PostCommand
 from search_requests.search_requests import SearchRequests
 from search_rides.search_rides import SearchRides
+
 
 class MenuCommand(Command):
     def __init__(self, email, cursor):
@@ -31,7 +33,7 @@ class MenuCommand(Command):
         elif opt == 'b':
             pass
         elif opt == 'r':
-            pass
+            PostCommand(self.cursor, self.user).menu()
         elif opt == 'v':
             search = SearchRequests(self.cursor, self.user)
             user_input = input('''Select one of the following: \n 1) View and modify your ride requests \n 2) View ride requests by location \n''')
