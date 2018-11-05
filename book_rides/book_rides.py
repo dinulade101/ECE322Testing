@@ -13,10 +13,17 @@ class OverbookError(Error):
 
 
 class BookRides:
-    def __init__(self, cursor):
+    def __init__(self, cursor, user):
         self.cursor = cursor
         self.rides = []
         self.rides_dict = dict()
+        self.user = user
+    
+    def main(self):
+        self.find_rides(self.user)
+        self.display_rides(0)
+        
+        
     def find_rides(self, driver):
         self.cursor.execute('''
         SELECT r.rno, r.price, r.rdate, r.seats, r.lugDesc, r.src, r.dst, r.driver, r.cno, r.seats-COUNT(b.bno) 
@@ -49,17 +56,6 @@ class BookRides:
             else:
                 pass
              
-
-    # def find_seats_remaining(self, rno):
-    #     query = '''
-    #     SELECT r.seats-COUNT(b.bno) FROM rides r, bookings b 
-    #     WHERE r.rno = {rno}
-    #     AND b.rno = {rno}
-    #     '''.format(rno = rno)
-
-    #     self.cursor.execute(query)
-    #     rows = self.cursor.fetchone()
-    #     return int(rows[0])
 
     def generate_bno(self):
         query = "SELECT MAX(bno) FROM bookings"
