@@ -7,13 +7,13 @@ class BookingCommand(Command):
     def __init__(self, cursor, email):
         super().__init__(cursor)
         self.email = email
-    
+
     def menu(self):
 
-        
+
         while(True):
             print('\nCreate or Cancel a Booking:\n\nTo go back to main menu at any time, press Ctrl + C\n')
-            user_input = input('''Select one of the following: \n 
+            user_input = input('''Select one of the following: \n
             1) Create a booking \n
             2) Cancel a booking \n''')
             if user_input == 'quit':
@@ -27,6 +27,3 @@ class BookingCommand(Command):
                     print('Not a valid option')
             else:
                 print('Not a valid input')
-
-
-        
