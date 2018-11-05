@@ -8,7 +8,7 @@ class CancelBooking:
 
     def get_member_bookings(self, m_email):
         self.cursor.execute('''
-            SELECT b.bno, b.email, b.rno, b.cost, b.seats
+            SELECT b.*
             FROM bookings b, rides r
             WHERE b.rno = r.rno
             AND r.driver = ?

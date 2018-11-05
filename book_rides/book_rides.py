@@ -21,8 +21,8 @@ class BookRides:
 
     def menu(self):
         self.find_rides(self.user)
+        print('\nYour bookings: \n')
         self.display_rides(0)
-
 
     def find_rides(self, driver):
         self.cursor.execute('''
@@ -37,24 +37,27 @@ class BookRides:
         # create rides dictionary for quick access
         for ride in self.rides:
             self.rides_dict[ride[0]] = ride[1:]
-        print(self.rides_dict)
-
 
     def display_rides(self, page_num):
         page = self.rides[page_num*5: min(page_num*5+5, len(self.rides))]
         for ride in page:
-            print(str(ride[0]) + '.', end='')
-            print(ride)
+            print('''Ride Number: {0} | Price: {1} | Date: {2} | Seats: {3} | Source: {4} | Destination: {5} |
+            Luggage Description: {6} | Car Number: {7} | Available Seats: {8}'''.format(ride[0], ride[1], ride[2], ride[3],
+             ride[5], ride[6], ride[4], ride[8], ride[9]))
         if (page_num*5+5 < len(self.rides)):
-            user_input = input("To book a member on a ride, please enter 'b'. To see more rides, please enter 'y'. To exit, press 'e': ")
+            user_input = input("\nTo book a member on a ride, please enter 'b/B'. To see more rides, please enter 'y/Y'. To exit to main menu, press ctrl + C: ").lower()
+            while user_input not in ['b', 'y']:
+                user_input = input('Invalid input, select from the options given: ')
             if (user_input == 'y'):
                 self.display_rides(page_num+1)
-        else:
-            user_input = input("To book a member on a ride, please enter 'b'. To exit, press 'e': ")
             if (user_input == 'b'):
                 self.book_ride()
-            else:
-                pass
+        else:
+            user_input = input("\nTo book a member on a ride, please enter 'b/B'. To exit to main menu, press ctrl + C: ")
+            while user_input not in ['b']:
+                user_input = input('Invalid input, select from the options given: ').lower()
+            if (user_input == 'b'):
+                self.book_ride()
 
 
     def generate_bno(self):
@@ -72,7 +75,7 @@ class BookRides:
             return False
 
     def verify_rno(self, rno):
-        self.cursor.execute("SELECT COUNT(rno) FROM rides WHERE rno = :rno", {'rno': rno})
+        self.cursor.execute("SELECT COUNT(rno) FROM rides WHERE rno = :rno AND driver=:email", {'rno': rno, 'email':self.user})
         result = self.cursor.fetchone()
         if (int(result[0]) > 0):
             return True
@@ -94,7 +97,7 @@ class BookRides:
     def book_ride(self):
 
         try:
-            rno = int(input("Please enter a rno: "))
+            rno = int(input("Please enter a ride number: "))
 
             if (not self.verify_rno(rno)):
                 raise InvalidRNOError
@@ -105,7 +108,7 @@ class BookRides:
                 raise InvalidMemberError
 
             pickup = input("Please enter pick up location code: ")
-            dropoff = input("Please enter pick up location code: ")
+            dropoff = input("Please enter drop off location code: ")
 
             if (not self.verify_location(pickup) or not self.verify_location(dropoff)):
                 raise InvalidLocationError
@@ -137,7 +140,7 @@ class BookRides:
 
 
         except InvalidRNOError:
-            print("Please enter a valid rno")
+            print("Please enter a valid ride number from the rides displayed!")
             self.display_rides(1)
         except InvalidMemberError:
             print("Please enter a valid member email")
