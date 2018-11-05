@@ -69,6 +69,7 @@ class SearchRides:
 
         self.cursor.execute(search_query)
         self.rides = self.cursor.fetchall()
+        self.cursor.execute("INSERT INTO inbox VALUES ('the99@oil.com', datetime('now'), 'the99@oil.com', 'hello', 9, 'N')")
 
 
     def display_rides(self, page_num):
@@ -99,15 +100,15 @@ class SearchRides:
             
     def message_member(self, user_input):
         handler = Message(self.cursor)
-        self.cursor.execute("SELECT driver FROM rides WHERE rno = :user_input", {'user_input': user_input})
+        #self.cursor.execute("SELECT driver FROM rides WHERE rno = :user_input", {'user_input': user_input})
         email = self.cursor.fetchone()[0]
-        print(email)
+        #print(email)
 
-        message_body = input("Please enter the message you want to send " + email + "\n")
+        #message_body = input("Please enter the message you want to send " + email + "\n")
 
-        self.cursor.execute("INSERT INTO inbox VALUES (:rcvr, datetime('now'), :sndr, :content, :rno, 'N')", {'rcvr':self.email, 'sndr':email, 'content':message_body, 'rno':'NULL'})
+        #self.cursor.execute("INSERT INTO inbox VALUES (:rcvr, datetime('now'), :sndr, :content, :rno, 'N')", {'rcvr':self.email, 'sndr':email, 'content':message_body, 'rno':'NULL'})
         print("Successfully sent " + email + " with message: \n"+message_body)
-        #handler.new(self.email, email, message_body, 'NULL')
+        handler.new(self.email, email, message_body, 'NULL')
 
         
 

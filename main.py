@@ -16,7 +16,8 @@ user = None
 def connect(path):
     global connection, cursor, user
 
-    connection = sqlite3.connect(path)
+    connection = sqlite3.connect(path, isolation_level=None)
+    #connection.aut
     cursor = connection.cursor()
     cursor.execute(' PRAGMA forteign_keys=ON; ')
     user = Member(None, None, cursor)
@@ -50,24 +51,6 @@ def main():
                 user.logout()
     connection.commit()
     connection.close()
-
-
-
-    # search = SearchRequests(cursor, 'the99@oil.com')
-    # user_input = input('''
-    #     Select one of the following: \n
-    #     1) View and modify your ride requests \n
-    #     2) View ride requests by location \n
-    # ''')
-    # if user_input == '1':
-    #     search.find_requests()
-    #     search.display_results(0)
-    # elif user_input == '2':
-    #     location = input("Please enter a lcode or city name: ")
-    #     search.find_requests_by_location(location)
-    #     search.display_results_location(0)
-
-
 
     return
 
