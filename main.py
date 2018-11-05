@@ -4,6 +4,8 @@ import os.path
 from authentication.member import Member
 from command.membercommand import MemberCommand
 from command.menucommand import MenuCommand
+from search_requests.search_requests import SearchRequests
+from messaging.message import Message
 
 connection = None
 cursor = None
@@ -14,7 +16,7 @@ user = None
 def connect(path):
     global connection, cursor, user
 
-    connection = sqlite3.connect(path)
+    connection = sqlite3.connect(path, isolation_level=None)
     cursor = connection.cursor()
     cursor.execute(' PRAGMA forteign_keys=ON; ')
     user = Member(None, None, cursor)
@@ -28,35 +30,38 @@ def main():
 
     db_path = str(sys.argv[1])
 
-    global connection, cursor, cmd, user
-
     if os.path.isfile(db_path):
         connect(db_path)
     else:
         print('ERROR: database file not found')
         sys.exit(0)
 
-    while True:
-        if not user.isLoggedIn():
-            cmd = MemberCommand(cursor)
-            user = cmd.user()
-            user.printUnseenMessages()
-            connection.commit()
-        else:
-            cmd = MenuCommand(user.email, cursor)
-            if not cmd.menu():
-                user.logout()
-    connection.commit()
-    connection.close()
-
+    app()
     return
 
-if __name__ == "__main__":
+def app():
+    global connection, cursor, cmd, user
+
     try:
-        main()
+        while True:
+            if not user.isLoggedIn():
+                cmd = MemberCommand(cursor)
+                user = cmd.user()
+                user.printUnseenMessages()
+                connection.commit()
+            else:
+                cmd = MenuCommand(user.email, cursor)
+                connection.commit()
+                if not cmd.menu():
+                    user.logout()
     except KeyboardInterrupt:
-        print('\nThanks for using rideshare!\n')
-        try:
-            sys.exit(0)
-        except SystemExit:
-            os._exit(0)
+        app()
+    except SystemExit:
+        if connection != None:
+            connection.commit()
+            connection.close()
+        sys.exit()
+
+
+if __name__ == "__main__":
+    main()

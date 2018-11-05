@@ -15,7 +15,8 @@ class MemberCommand(Command):
         opt = input('''Welcome to rideshare!\n
         l/L) To Login\n
         s/S) To Signup\n
-        ctrl + C) Quit\n''')
+        ctrl + C) Show this menu again\n
+        quit) Quit\n''')
 
         if opt.lower() == 'l':
             email = input('Enter your email associated with rideshare: ')
@@ -45,6 +46,9 @@ class MemberCommand(Command):
                 phone = input('Please enter a valid number: ')
             pwd = getpass.getpass('Enter a password to associate with this account: ')
             member = Member.signup(email, name, phone, pwd, self.cursor)
+
+        elif opt.lower() == 'quit':
+            sys.exit(0)
 
         else:
             print('Invalid option')
