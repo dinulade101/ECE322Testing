@@ -29,7 +29,7 @@ class BookRides:
         SELECT r.rno, r.price, r.rdate, r.seats, r.lugDesc, r.src, r.dst, r.driver, r.cno, r.seats-COUNT(b.bno)
         FROM rides r, bookings b
         WHERE driver = :driver
-        AND r.rno = b.bno
+        AND r.rno = b.rno
         GROUP BY r.rno, r.price, r.rdate, r.seats, r.lugDesc, r.src, r.dst, r.driver, r.cno
         ''', {'driver': driver})
         self.rides = self.cursor.fetchall()
@@ -37,6 +37,7 @@ class BookRides:
         # create rides dictionary for quick access
         for ride in self.rides:
             self.rides_dict[ride[0]] = ride[1:]
+        print(self.rides_dict)
 
     def display_rides(self, page_num):
         page = self.rides[page_num*5: min(page_num*5+5, len(self.rides))]
@@ -97,9 +98,9 @@ class BookRides:
     def book_ride(self):
 
         try:
-            rno = int(input("Please enter a ride number: "))
+            rno = input("Please enter a ride number: ")
 
-            if (not self.verify_rno(rno)):
+            if (not rno.isdigit() or not (int(rno) in self.rides_dict.keys())):
                 raise InvalidRNOError
 
             member = input("Please enter the email of the member you want to book on the ride: ")
@@ -121,8 +122,8 @@ class BookRides:
             seats = input("Please enter the number of seats for ride: ")
 
 
-            if (int(seats) > self.rides_dict[rno][-1]):
-                overbook = input("Warning: the ride is being over booked, are you sure you want to continue (y/n)")
+            if (int(seats) > self.rides_dict[int(rno)][-1]):
+                overbook = input("Warning: the ride is being over booked, are you sure you want to continue (y/n): ")
                 if overbook == 'n':
                     raise OverbookError
                 else:
@@ -133,21 +134,24 @@ class BookRides:
 
             self.cursor.execute('''INSERT INTO bookings VALUES (:bno, :member, :rno, :cost, :seats, :pickup, :dropoff)
                                 ''', {'bno': bno, 'member': member, 'rno': rno, 'cost': cost, 'seats': seats, 'pickup': pickup, 'dropoff': dropoff})
-
+            #print('''INSERT INTO bookings VALUES ({bno}, {member}, {rno}, {cost}, {seats}, {pickup}, {dropoff})
+                  #'''.format(bno= bno, member= member, rno= rno, cost= cost, seats= seats, pickup= pickup, dropoff= dropoff))
             print("Ride successfully booked!")
+            self.find_rides(self.user)
+            self.display_rides(0)
 
             #implement messaging system to notify user that they are booked on a ride
 
 
         except InvalidRNOError:
             print("Please enter a valid ride number from the rides displayed!")
-            self.display_rides(1)
+            self.display_rides(0)
         except InvalidMemberError:
             print("Please enter a valid member email")
-            self.display_rides(1)
+            self.display_rides(0)
         except InvalidLocationError:
             print("Please enter a valid pickup and dropoff location code")
-            self.display_rides(1)
+            self.display_rides(0)
         except OverbookError:
             print("Please select a fewer number of seats")
-            self.display_rides(1)
+            self.display_rides(0)
