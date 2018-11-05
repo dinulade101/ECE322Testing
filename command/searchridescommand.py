@@ -10,4 +10,3 @@ class SearchRidesCommand(Command):
         user_input = input().split(',')
         search.find_rides(user_input)
         search.display_rides(0)
-    

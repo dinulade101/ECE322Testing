@@ -1,4 +1,6 @@
+import sys
 from command.command import Command
+from command.offerRideCommand import OfferRideCommand
 from search_requests.search_requests import SearchRequests
 from search_rides.search_rides import SearchRides
 
@@ -16,11 +18,11 @@ class MenuCommand(Command):
         r/R) Make a ride request\n
         v/V) Search or delete ride requests\n
         l/L) Logout\n
-        ctrl + C) Quit\n''')
+        quit) Quit\n''')
 
         opt = opt.lower()
         if opt == 'o':
-            pass
+            OfferRideCommand(self.user, self.cursor).menu()
         elif opt == 's':
             search = SearchRides(self.cursor, self.user)
             user_input = input("Please enter 1-3 location key words each seperated by a comma: ").split(',')
@@ -42,6 +44,8 @@ class MenuCommand(Command):
                 search.display_results_location(0)
         elif opt == 'l':
             return False
+        elif opt == 'quit':
+            sys.exit(0)
         else:
             print('Invalid option!')
             return self.menu()
