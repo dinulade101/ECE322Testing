@@ -23,6 +23,18 @@ class SearchRequests:
         AND r.email = :email
         ''', {'email': self.email})
         self.requests = self.cursor.fetchall()
+    
+    '''def format_request(self, ride):
+        print("The ride request number is: "+ str(ride[0]))
+        print("Email: "+ str(ride[1]))
+        print("Date: "+ str(ride[2]))
+        print("Number of seats: "+ str(ride[3]))
+        print("Luggage description: "+ str(ride[4]))
+        print("Start: "+ str(ride[5]))
+        print("Destination: "+ str(ride[6]))
+        print("Driver: "+ str(ride[7]))
+        print("Car number: "+ str(ride[8]) + '\n')
+    '''
 
     def display_results(self, page_num):
         page = self.requests[page_num*5: min(page_num*5+5, len(self.requests))]

@@ -72,15 +72,15 @@ class SearchRides:
         self.cursor.execute("INSERT INTO inbox VALUES ('the99@oil.com', datetime('now'), 'the99@oil.com', 'hello', 9, 'N')")
 
     def format_ride(self, ride):
-        print("The ride number is: "+ ride[0])
-        print("Price: "+ ride[1])
-        print("Date: "+ ride[2])
-        print("Number of seats: "+ ride[3])
-        print("Luggage description: "+ ride[4])
-        print("Start: "+ ride[5])
-        print("Destination: "+ ride[6])
-        print("Driver: "+ ride[7])
-        print("Car number: "+ ride[8])
+        print("The ride number is: "+ str(ride[0]))
+        print("Price: "+ str(ride[1]))
+        print("Date: "+ str(ride[2]))
+        print("Number of seats: "+ str(ride[3]))
+        print("Luggage description: "+ str(ride[4]))
+        print("Start: "+ str(ride[5]))
+        print("Destination: "+ str(ride[6]))
+        print("Driver: "+ str(ride[7]))
+        print("Car number: "+ str(ride[8]) + '\n')
 
     def display_rides(self, page_num):
         """
@@ -94,7 +94,7 @@ class SearchRides:
         for ride in page:
             print(str(ride[0]) + '.', end='')
             #print(ride)
-            format_ride(ride)
+            self.format_ride(ride)
         if (page_num*5+5 < len(self.rides)):
             user_input = input("To message the poster of a ride, please enter the ride number. See more rides (y/n)?")
             if (user_input == 'y'):
@@ -113,9 +113,12 @@ class SearchRides:
         handler = Message(self.cursor)
         self.cursor.execute("SELECT driver FROM rides WHERE rno = :user_input", {'user_input': user_input})
         email = self.cursor.fetchone()[0]
+
+        message_body = input("Please enter the message you want to send " + email + "\n")
         
         print("Successfully sent " + email + " with message: \n"+message_body)
         handler.new(self.email, email, message_body, user_input)
+        print('')
 
         
 
