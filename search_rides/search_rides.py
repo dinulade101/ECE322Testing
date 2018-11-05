@@ -5,6 +5,7 @@ class SearchRides:
     def __init__(self, cursor, email):
         self.cursor = cursor
         self.rides = []
+        self.rides_dict = dict()
         self.email = email
     def is_key_word_valid(self,word):
         return word
@@ -17,13 +18,13 @@ class SearchRides:
         """   
 
         search_query = '''
-        SELECT r.*, c.*
+        SELECT DISTINCT r.*, c.*
         FROM rides r, locations l1, locations l2, locations l3, enroute e, cars c
         WHERE l1.lcode = r.src
         AND l2.lcode = r.dst
         AND e.rno = r.rno 
         AND l3.lcode = e.lcode
-        AND c.cno = r.cno'''
+        AND (r.cno IS NULL OR c.cno = r.cno)'''
 
         for index, word in enumerate(key_words):
             if (index != 0):
@@ -71,6 +72,8 @@ class SearchRides:
             print("No result found for the following keywords. Please try again.")
             self.menu()
             return
+        for ride in self.rides:
+            self.rides_dict[ride[0]] = ride[1:]
         self.display_rides(0)
 
     def format_ride(self, ride):
@@ -81,8 +84,15 @@ class SearchRides:
         print("Luggage description: "+ str(ride[4]))
         print("Start: "+ str(ride[5]))
         print("Destination: "+ str(ride[6]))
-        print("Driver: "+ str(ride[7]))
-        print("Car number: "+ str(ride[8]) + '\n')
+        if (len(ride) >= 8):
+            print("Driver: "+ str(ride[7]))
+            print("Car number: "+ str(ride[8]))
+            print("Car make: "+ str(ride[10]))
+            print("Car model: "+ str(ride[11]))
+            print("Car make: "+ str(ride[12]))
+            print("Car seats: "+ str(ride[13]))
+            print("Car owner: "+ str(ride[14]))
+        print('')
 
     def menu(self):
         user_input = input("Please enter 1-3 location key words each seperated by a comma: ").split(',')
@@ -126,16 +136,19 @@ class SearchRides:
 
             
     def message_member(self, user_input):
-        handler = Message(self.cursor)
-        self.cursor.execute("SELECT driver FROM rides WHERE rno = :user_input", {'user_input': user_input})
-        email = self.cursor.fetchone()[0]
+        if (user_input.isdigit() and int(user_input) in self.rides_dict):
+            handler = Message(self.cursor)
+            self.cursor.execute("SELECT driver FROM rides WHERE rno = :user_input", {'user_input': user_input})
+            email = self.cursor.fetchone()[0]
 
-        message_body = input("Please enter the message you want to send " + email + "\n")
-        
-        print("Successfully sent " + email + " with message: \n"+message_body)
-        handler.new(self.email, email, message_body, user_input)
-        print('')
-
+            message_body = input("Please enter the message you want to send " + email + "\n")
+            
+            print("Successfully sent " + email + " with message: \n"+message_body)
+            handler.new(self.email, email, message_body, user_input)
+            print('')
+        else:
+            error = input("Invalid entry. To message the poster of a ride, please enter the ride number: ")
+            self.message_member(error)
         
 
 
