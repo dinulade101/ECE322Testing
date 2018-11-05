@@ -120,7 +120,11 @@ insert into bookings values
         (9, 'cadence@rap.fm', 27, null, 1, null, null),
         (10, 'connor@oil.com', 5, 45, 1, null, null),
         (11, 'mal@serenity.ca', 41, null, 1, null, null),
-        (12, 'nellie@five.gov', 42, null, 1, null, null);
+        (12, 'nellie@five.gov', 42, null, 1, null, null),
+        (13, 'mal@serenity.ca', 39, null, 1, null, null),
+        (14, 'cadence@rap.fm', 38, null, 1, null, null),
+        (15, 'mal@serenity.ca', 37, null, 1, null, null),
+        (16, 'john@acorn.nut', 36, null, 1, null, null);
 
 -- |rno|lcode|
 insert into enroute values

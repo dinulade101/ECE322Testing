@@ -4,6 +4,8 @@ import os.path
 from authentication.member import Member
 from command.membercommand import MemberCommand
 from command.menucommand import MenuCommand
+from search_requests.search_requests import SearchRequests
+from messaging.message import Message
 
 connection = None
 cursor = None
@@ -14,7 +16,7 @@ user = None
 def connect(path):
     global connection, cursor, user
 
-    connection = sqlite3.connect(path)
+    connection = sqlite3.connect(path, isolation_level=None)
     cursor = connection.cursor()
     cursor.execute(' PRAGMA forteign_keys=ON; ')
     user = Member(None, None, cursor)
