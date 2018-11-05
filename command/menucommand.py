@@ -36,7 +36,7 @@ class MenuCommand(Command):
         elif opt == 'b':
             BookingCommand( self.cursor, self.user).menu()
         elif opt == 'r':
-            PostCommand(self.user,self.cursor).menu()
+            PostCommand(self.cursor, self.user).menu()
         elif opt == 'v':
             SearchRequestsCommand(self.cursor, self.user).menu()
         elif opt == 'l':
