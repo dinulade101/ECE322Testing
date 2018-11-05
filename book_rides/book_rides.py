@@ -14,10 +14,11 @@ class BookRides:
 
     def find_rides(self, driver):
         self.cursor.execute('''
-        SELECT r.rno, r.price, r.rdate, r.seats, r.lugDesc, r.src, r.dst, r.driver, r.cno, r.seats-SUM(b.seats)
-        FROM rides r, bookings b
+        SELECT r.rno, r.price, r.rdate, r.seats, r.lugDesc, r.src, r.dst, r.driver, r.cno, r.seats-IFNULL(SUM(b.seats),0)
+        FROM rides r
+        LEFT JOIN bookings b
+        ON r.rno = b.rno
         WHERE driver = :driver
-        AND r.rno = b.rno
         GROUP BY r.rno, r.price, r.rdate, r.seats, r.lugDesc, r.src, r.dst, r.driver, r.cno
         ''', {'driver': driver})
         self.rides = self.cursor.fetchall()
