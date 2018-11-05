@@ -6,8 +6,16 @@ class SearchRides:
         self.cursor = cursor
         self.rides = []
         self.email = email
+
+    def containsRno(self, rno):
+        for ride in self.rides:
+            if ride[0] == rno:
+                return True
+        return False
+
     def is_key_word_valid(self,word):
         return word
+
     def find_rides(self, key_words):
         """
         Finds rides that match locations that match the key_words provided
@@ -67,6 +75,11 @@ class SearchRides:
 
         self.cursor.execute(search_query)
         self.rides = self.cursor.fetchall()
+        if (len(self.rides) == 0):
+            print("No result found for the following keywords. Please try again.")
+            self.menu()
+            return
+        self.display_rides(0)
 
     def format_ride(self, ride):
         print("The ride number is: "+ str(ride[0]))
@@ -78,6 +91,19 @@ class SearchRides:
         print("Destination: "+ str(ride[6]))
         print("Driver: "+ str(ride[7]))
         print("Car Number: "+ str(ride[8]) + '\n')
+
+    def menu(self):
+        user_input = input("Please enter 1-3 location key words each seperated by a comma: ").split(',')
+        if (len(user_input) > 3 or len(user_input) == 0 or user_input[0] == ''):
+            print("Please enter a valid set of key words. Otherwise, to return to main menu press Ctrl + C: ")
+            self.menu()
+            return
+        print(user_input)
+        for index in range(len(user_input)):
+            user_input[index] = user_input[index].strip()
+
+        self.find_rides(user_input)
+        self.display_rides(0)
 
     def display_rides(self, page_num):
         """
@@ -92,16 +118,16 @@ class SearchRides:
             print(str(ride[0]) + '.', end='')
             self.format_ride(ride)
         if (page_num*5+5 < len(self.rides)):
-            user_input = input("To message the poster of a ride, please enter the ride number. See more rides (y/n)?")
+            user_input = input("To see more rides enter 'y', To message the poster of a ride, enter the ride number:  ")
             if (user_input == 'y'):
                 self.display_rides(page_num+1)
                 return
         else:
             user_input = input("To message the poster of a ride, please enter the ride number: ")
-        if user_input.isdigit():
+        if user_input.isdigit() and self.containsRno(user_input):
             self.message_member(user_input)
         else:
-            print("Invalid input entered")
+            print("\nInvalid input entered, please select from ride number displayed")
             self.display_rides(0)
 
 
@@ -110,7 +136,7 @@ class SearchRides:
         self.cursor.execute("SELECT driver FROM rides WHERE rno = :user_input", {'user_input': user_input})
         email = self.cursor.fetchone()[0]
 
-        message_body = input("Please enter the message you want to send " + email + "\n")
+        message_body = input("Please enter the message you want to send to " + email + "\n")
 
         print("Successfully sent " + email + " with message: \n"+message_body)
         handler.new(self.email, email, message_body, user_input)
