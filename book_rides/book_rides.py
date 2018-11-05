@@ -129,6 +129,6 @@ class BookRides:
         msg = '''Hi {0}, you've been booked on a ride (ride no: {1}).
         Your booking reference number is {2}. You have booked {3} seats at ${4} per seat.
         Your pickup location is {5} and dropoff is {6}'''.format(member, rno, bno, seats, cost, pickup, dropoff)
-        
+
         Message(self.cursor).new(self.user, member, msg ,rno)
         print("Ride successfully booked, message sent to the user!")

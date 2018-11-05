@@ -3,7 +3,7 @@ import sqlite3
 class CancelBooking:
 
     def __init__(self, cursor):
-        #assume cursor is already setup
+        # assume cursor is already setup
         self.cursor = cursor
 
     def get_member_bookings(self, m_email):
@@ -23,8 +23,6 @@ class CancelBooking:
         '''
         deleted_email, rno_deleted = self.delete_booking(bno)
         self.message_deleted_user(m_email ,deleted_email, rno_deleted)
-
-
 
     def delete_booking(self, bno):
         '''
