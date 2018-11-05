@@ -1,5 +1,6 @@
 import sqlite3
 from messaging.message import Message
+import re
 
 class SearchRides:
     def __init__(self, cursor, email):
@@ -24,6 +25,14 @@ class SearchRides:
         :param key_words: array of 1-3 strings specifying key words locations should be matched to
         :returns: None
         """
+
+        #regex to check against sql injections 
+        p = re.compile("[A-Z-a-z0-9]+")
+        for word in key_words:
+            if (not p.match(word)):
+                print("Invalid keyword. Please try again.")
+                self.menu()
+                return
 
         search_query = '''
         SELECT DISTINCT r.*, c.*
@@ -75,7 +84,6 @@ class SearchRides:
 
 
         search_query += ' UNION' + search_query_no_enroute + ' COLLATE NOCASE'
-        print(search_query)
         self.cursor.execute(search_query)
         self.rides = self.cursor.fetchall()
         if (len(self.rides) == 0):
@@ -124,7 +132,7 @@ class SearchRides:
         :param page_num: specifies which page of rides to be shown (5 rides per page)
         :returns: None
         """
-        user_input = 0
+        user_input = ""
         if page_num == 0:
             print()
         page = self.rides[page_num*5: min(page_num*5+5, len(self.rides))]
@@ -136,7 +144,8 @@ class SearchRides:
             if (user_input == 'y'):
                 self.display_rides(page_num+1)
                 return
-        while not user_input.isdigit() and not self.containsRno(user_input):
+        user_input = input("To message the poster of a ride, enter the ride number:  ")
+        while (user_input.isdigit() and not self.containsRno(user_input)):
             user_input = input("Invalid entry, please select a ride number from the options: ")
         self.message_member(user_input)
 
