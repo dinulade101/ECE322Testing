@@ -27,12 +27,13 @@ class SearchRides:
 
         search_query = '''
         SELECT DISTINCT r.*, c.*
-        FROM rides r, locations l1, locations l2, locations l3, enroute e, cars c
+        FROM rides r, locations l1, locations l2, locations l3, enroute e
+        LEFT JOIN cars c on c.cno=r.cno
         WHERE l1.lcode = r.src
         AND l2.lcode = r.dst
         AND e.rno = r.rno
         AND l3.lcode = e.lcode
-        AND (r.cno IS NULL OR c.cno = r.cno)'''
+        '''
 
         for index, word in enumerate(key_words):
             if (index != 0):
@@ -53,10 +54,11 @@ class SearchRides:
 
         search_query_no_enroute = '''
         SELECT r.*, c.*
-        FROM rides r, locations l1, locations l2, cars c
+        FROM rides r, locations l1, locations l2
+        LEFT JOIN cars c on c.cno=r.cno
         WHERE l1.lcode = r.src
         AND l2.lcode = r.dst
-        AND c.cno = r.cno'''
+        '''
 
         for index, word in enumerate(key_words):
             if (index != 0):
@@ -73,7 +75,7 @@ class SearchRides:
 
 
         search_query += ' UNION' + search_query_no_enroute + ' COLLATE NOCASE'
-
+        print(search_query)
         self.cursor.execute(search_query)
         self.rides = self.cursor.fetchall()
         if (len(self.rides) == 0):
@@ -139,7 +141,7 @@ class SearchRides:
             self.message_member(user_input)
         else:
             print("\nInvalid input entered, please select from ride number displayed")
-            self.display_rides(0)
+            self.display_rides(page_num)
 
 
     def message_member(self, user_input):
