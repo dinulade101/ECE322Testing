@@ -24,23 +24,21 @@ class SearchRequests:
         ''', {'email': self.email})
         self.requests = self.cursor.fetchall()
     
-    '''def format_request(self, ride):
+    def format_request(self, ride):
         print("The ride request number is: "+ str(ride[0]))
         print("Email: "+ str(ride[1]))
-        print("Date: "+ str(ride[2]))
-        print("Number of seats: "+ str(ride[3]))
-        print("Luggage description: "+ str(ride[4]))
-        print("Start: "+ str(ride[5]))
-        print("Destination: "+ str(ride[6]))
-        print("Driver: "+ str(ride[7]))
-        print("Car number: "+ str(ride[8]) + '\n')
-    '''
+        print("Ride date: "+ str(ride[2]))
+        print("Pickup location: "+ str(ride[3]))
+        print("Dropoff location: "+ str(ride[4]))
+        print("Amount: "+ str(ride[5]))
+        print('')
+    
 
     def display_results(self, page_num):
         page = self.requests[page_num*5: min(page_num*5+5, len(self.requests))]
         for ride in page:
             print(str(ride[0]) + '.', end='')
-            print(ride[1:])
+            self.format_request(ride)
         if (page_num*5+5 < len(self.requests)):
             user_input = input("To delete a request, please enter the reqest number. To see more requests more requests enter (y/n)?")
             if (user_input == 'y'):
@@ -59,7 +57,7 @@ class SearchRequests:
         page = self.requests[page_num*5: min(page_num*5+5, len(self.requests))]
         for ride in page:
             print(str(ride[0]) + '.', end='')
-            print(ride[1:])
+            self.format_request(ride)
         if (page_num*5+5 < len(self.requests)):
             user_input = input("To message the poster of a request, please enter the reqest number. To see more requests more requests enter (y/n)?")
             if (user_input == 'y'):
