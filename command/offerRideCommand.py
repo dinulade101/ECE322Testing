@@ -41,7 +41,7 @@ class OfferRideCommand(Command):
         while len(locs) == 0:
             dst = input('No matching locations found! Enter another keyword: ')
             locs = self.ofr.findLocations(dst)
-        src = self.ofr.getLocationFrom(locs)
+        dst = self.ofr.getLocationFrom(locs)
 
         cno = input("Do you want to add your car for this ride (y/n)?: ")
         while not cno.lower() in ['y', 'n']:
