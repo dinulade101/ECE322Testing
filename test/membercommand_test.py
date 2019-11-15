@@ -2,12 +2,52 @@ import unittest
 from unittest.mock import patch
 from command import membercommand
 
-class TestSum(unittest.TestCase):
+class MemberCommandTest(unittest.TestCase):
     @patch('sqlite3.Cursor')
     def testValidateEmail(self, mock_sql_cursor):
-        email = "asdf^gmail.com"
         memberCommand = membercommand.MemberCommand(mock_sql_cursor)
-        self.assertFalse(memberCommand.validateEmail(email))
+
+        # Error guessing 
+        self.assertFalse(memberCommand.validateEmail("")) # empty input 
+
+        # Equivalence classes
+        """
+            Valid equivalence classes for email address:
+                * string including @
+                * string consisting of alphanumeric characters
+            Invalid equivalence classes for email address:
+                * string without '@'
+                * string containing special chars like *
+        """
+        self.assertTrue(memberCommand.validateEmail("asdf@gmail.com")) # string including '@'
+        self.assertTrue(memberCommand.validateEmail("asdf123@g2mail.com")) # string of alpha numeric characters 
+
+        self.assertFalse(memberCommand.validateEmail("asdf^gmail.com")) # string without '@'
+        self.assertFalse(memberCommand.validateEmail("asdf*@gmail.com")) # string containing special chars.
+
+    @patch('sqlite3.Cursor')
+    def testValidateName(self, mock_sql_cursor):
+        memberCommand = membercommand.MemberCommand(mock_sql_cursor)
+
+        # Error guessing
+        self.assertFalse(memberCommand.validateName("")) # empty input
+
+        # boundary testing where the charater limit is 20:
+        self.assertTrue(memberCommand.validateName("Asadnfjsdnfjsdnajfnf")) # 20 chars
+        self.assertFalse(memberCommand.validateName("Asadnfjsdnfjsdnajfnfn")) # 21 chars 
+
+        self.assertTrue(memberCommand.validateName("Bob"))
+
+    @patch('sqlite3.Cursor')
+    def testValidatePhoneNumber(self, mock_sql_cursor):
+        memberCommand = membercommand.MemberCommand(mock_sql_cursor)
+
+        # Error guessing 
+        self.assertFalse(memberCommand.validatePhone("")) # empty input 
+
+        self.assertTrue(memberCommand.validatePhone("403-000-0000")) 
+        self.assertFalse(memberCommand.validatePhone("40-000-0000")) 
+
         
 if __name__  == "main":
     # with unittest.mock.patch('sys.argv', ['prj-tables.sql']):

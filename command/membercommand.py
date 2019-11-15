@@ -64,7 +64,7 @@ class MemberCommand(Command):
 
     @staticmethod
     def validateName(name):
-        if len(name) <= 20:
+        if len(name) <= 20 and len(name) > 0:
             return True
         return False
 
