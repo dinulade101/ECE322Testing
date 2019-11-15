@@ -56,11 +56,11 @@ class MemberCommandTest(unittest.TestCase):
                 * numbers not in format (NNN-NNN-NNNN)
         """
         self.assertTrue(memberCommand.validatePhone("403-000-0000")) # 9 numeric characters in format (NNN-NNN-NNNN)
-        
+
         self.assertFalse(memberCommand.validatePhone("40a-000-0000")) # non numeric characters
         self.assertFalse(memberCommand.validatePhone("4-000-0000")) # less than 9 numbers
         self.assertFalse(memberCommand.validatePhone("403-0001-0000")) # greater than 9 numbers
-        self.assertFalse(memberCommand.validatePhone("40-000-10000")) # number snot in format 
+        self.assertFalse(memberCommand.validatePhone("40-000-10000")) # numbers not in format 
 
         
 if __name__  == "main":
