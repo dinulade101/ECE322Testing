@@ -45,8 +45,22 @@ class MemberCommandTest(unittest.TestCase):
         # Error guessing 
         self.assertFalse(memberCommand.validatePhone("")) # empty input 
 
-        self.assertTrue(memberCommand.validatePhone("403-000-0000")) 
-        self.assertFalse(memberCommand.validatePhone("40-000-0000")) 
+        # Equivalence classes
+        """
+            Valid equivalence classes for name:
+                * string consisting of 9 numeric characters 
+            Invalid equivalence classes for email address:
+                * string consisting of non numeric characters 
+                * string having less than 9 numbers 
+                * string having greater than 9 numbers 
+                * numbers not in format (NNN-NNN-NNNN)
+        """
+        self.assertTrue(memberCommand.validatePhone("403-000-0000")) # 9 numeric characters in format (NNN-NNN-NNNN)
+        
+        self.assertFalse(memberCommand.validatePhone("40a-000-0000")) # non numeric characters
+        self.assertFalse(memberCommand.validatePhone("4-000-0000")) # less than 9 numbers
+        self.assertFalse(memberCommand.validatePhone("403-0001-0000")) # greater than 9 numbers
+        self.assertFalse(memberCommand.validatePhone("40-000-10000")) # number snot in format 
 
         
 if __name__  == "main":
