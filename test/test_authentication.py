@@ -34,6 +34,13 @@ class AuthenticationTest(unittest.TestCase):
                             PASSWORD, mock_sql_cursor)
         self.assertEqual(EMAIL, mem.email)
 
+    def testLogin(self):
+        mock_sql_cursor = Mock()
+        mock_sql_cursor.fetchone.return_value = [PASSWORD]
+        mem = Member.signup(EMAIL, "jim", "111-111-1111",
+                            PASSWORD, mock_sql_cursor)
+        self.assertTrue(mem.login)
+
     # Integration Tests
 
     def testValidSignUpLogin(self):
