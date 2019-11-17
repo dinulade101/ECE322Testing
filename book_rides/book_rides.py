@@ -132,3 +132,4 @@ class BookRides:
 
         Message(self.cursor).new(self.user, member, msg ,rno)
         print("Ride successfully booked, message sent to the user!")
+        return True
