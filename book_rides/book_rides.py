@@ -48,6 +48,8 @@ class BookRides:
                 user_input = input('Invalid input, select from the options given: ').lower()
             if (user_input == 'b'):
                 self.book_ride()
+        
+        return True
 
 
     def generate_bno(self):
