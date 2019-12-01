@@ -32,7 +32,6 @@ class BookRidesTest(unittest.TestCase):
         bookrides.rides_dict[1] = [2]
         self.assertTrue(bookrides.book_ride())
 
-
     @patch('sqlite3.Cursor')
     def testVerifyLocation(self, mock_sql_cursor):     
         mock_sql_cursor = Mock()
@@ -44,7 +43,6 @@ class BookRidesTest(unittest.TestCase):
 
         mock_sql_cursor.fetchone.return_value = [1]
         self.assertTrue(bookrides.verify_location(""))
-
 
     @patch('sqlite3.Cursor')
     def testVerifyRno(self, mock_sql_cursor):     
@@ -70,7 +68,6 @@ class BookRidesTest(unittest.TestCase):
 
         mock_sql_cursor.fetchone.return_value = [1]
         self.assertTrue(bookrides.verify_email(""))
-
 
     @patch('sqlite3.Cursor')
     def testGenerateBno(self, mock_sql_cursor):     
@@ -140,9 +137,3 @@ class BookRidesTest(unittest.TestCase):
 
 if __name__ == "main":
     unittest.main()
-
-
-def test(x):
-    if x < 2:
-        x = 5
-    return x
