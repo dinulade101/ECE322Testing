@@ -41,8 +41,6 @@ class AuthenticationTest(unittest.TestCase):
                             PASSWORD, mock_sql_cursor)
         self.assertTrue(mem.login)
 
-    # Integration Tests
-
     def testValidSignUpLogin(self):
         # Signup a new user
         mock_sql_cursor = Mock()
